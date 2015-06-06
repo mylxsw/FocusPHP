@@ -38,10 +38,11 @@ class DefaultRouter implements Route {
      * 判断路由规则是否匹配
      *
      * @param string $pathinfo pathinfo
+     * @param int    $index    路由规则索引
      *
      * @return bool
      */
-    public function isMatched( $pathinfo ) {
+    public function isMatched( $pathinfo, $index ) {
         return $this->_key == $pathinfo;
     }
 

@@ -45,8 +45,11 @@ class Router {
     public function parse() {
         $matched = [];
         foreach ($this->_routers as $router) {
-            if ($router->isMatched($this->getPathInfo())) {
+            if ($router->isMatched($this->getPathInfo(), count($matched))) {
                 $matched[] = $router;
+                if ($router->isContinue() === false) {
+                    break;
+                }
             }
         }
 

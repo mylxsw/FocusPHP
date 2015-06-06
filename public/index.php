@@ -7,17 +7,21 @@
  */
 namespace Demo;
 
-use Focus\Router\MVCRouter;
+use Focus\MVC\Router;
+use Focus\Request\Request;
+use Focus\Response\Response;
+use Focus\Server;
 
-require __DIR__ . '/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
-$server = \Focus\Server::init();
+$server = Server::init();
+$server->registerAutoloader(__DIR__, 'Demo');
 
 // 先注册者优先
-$server->map(new MVCRouter('Demo\Controllers'));
-$server->map('user', function(
-    \Focus\Request\Request $request,
-    \Focus\Response\Response $response) {
+$server->registerRouter(new Router('Demo\Controllers'));
+$server->registerRouter('user', function(
+    Request $request,
+    Response $response) {
 
     $response->write("hello, world");
 });

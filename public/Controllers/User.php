@@ -18,7 +18,7 @@ class User {
         $response->write("Welcome , " . $request->get('username', 'anonymous'));
     }
 
-    public function helloAction($request, $response) {
+    public function helloAction(Request $request, Response $response) {
         $response->write('Hello!');
     }
 } 

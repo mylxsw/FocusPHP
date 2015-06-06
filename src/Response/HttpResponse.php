@@ -12,9 +12,10 @@ namespace Focus\Response;
 class HttpResponse implements Response {
 
     private $_buffer = [];
+    private $_headers = [];
 
     public function header( $header ) {
-        // TODO: Implement header() method.
+        $this->_headers[] = $header;
     }
 
     public function write( ...$data ) {
@@ -22,6 +23,10 @@ class HttpResponse implements Response {
     }
 
     public function output() {
+        foreach ($this->_headers as $header) {
+            header($header);
+        }
+
         foreach ($this->_buffer as $buffer) {
             echo $buffer;
         }

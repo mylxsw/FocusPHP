@@ -13,6 +13,7 @@ use Focus\Request\HttpRequest;
 use Focus\Request\Request;
 use Focus\Response\HttpResponse;
 use Focus\Response\Response;
+use Focus\Router\NotFoundRouter;
 use Focus\Uri\DefaultUri;
 use Focus\Uri\Uri;
 
@@ -40,6 +41,11 @@ class Server {
      */
     private $_uri;
 
+    /**
+     * @var Router 404 Router
+     */
+    private $_notFoundRouter;
+
     private function __construct() {
         $this->_router = new Router();
     }
@@ -52,6 +58,12 @@ class Server {
      */
     public static function init() {
         if (empty(self::$_instance)) {
+
+            // 环境检测
+            if (version_compare(PHP_VERSION, '5.6.0', '<')) {
+                throw new \RuntimeException('PHP版本过低，请升级为PHP 5.6.0以后版本');
+            }
+
             self::$_instance = new Server();
         }
 
@@ -62,15 +74,14 @@ class Server {
      * 执行请求处理过程
      */
     public function run() {
+        $this->registerRouter($this->getNotFoundRouter());
+
         $this->_router->setPathInfo($this->getUri()->getPathInfo());
         $this->getRequest()->setUri($this->getUri());
 
         $matched = $this->_router->parse();
         foreach ($matched as $router) {
             $router->execute($this->getRequest(), $this->getResponse());
-            if ($router->isContinue() === false) {
-                break;
-            }
         }
 
         $this->getResponse()->output();
@@ -82,8 +93,36 @@ class Server {
      * @param $router
      * @param $params
      */
-    public function map($router, ...$params) {
+    public function registerRouter($router, ...$params) {
         $this->_router->add($router, ...$params);
+    }
+
+    /**
+     * 注册自动类加载器
+     *
+     * @param string $baseDir 项目根目录
+     * @param string $baseNs  根目录的命名空间
+     */
+    public function registerAutoloader($baseDir, $baseNs) {
+        $baseNs = $baseNs[strlen($baseNs) - 1] == '\\' ? $baseNs : "{$baseNs}\\";
+        $baseDir = rtrim($baseDir, '/');
+
+        spl_autoload_register(
+            function ($class) use ($baseDir, $baseNs) {
+                if (strncmp($baseNs, $class, strlen($baseNs)) == 0) {
+                    $filename = str_replace(
+                        '\\',
+                        '/',
+                        $baseDir . '/' . substr($class, strlen($baseNs)) . '.php'
+                    );
+                    if (file_exists($filename)) {
+                        include $filename;
+                    }
+                }
+            },
+            true,
+            false
+        );
     }
 
     /**
@@ -136,4 +175,23 @@ class Server {
     public function setUri(Uri $uri ) {
         $this->_uri = $uri;
     }
+
+    /**
+     * @return Router
+     */
+    public function getNotFoundRouter() {
+        if (empty($this->_notFoundRouter)) {
+            $this->_notFoundRouter = new NotFoundRouter();
+        }
+        return $this->_notFoundRouter;
+    }
+
+    /**
+     * @param NotFoundRouter $notFoundRouter
+     */
+    public function setNotFoundRouter(NotFoundRouter $notFoundRouter ) {
+        $this->_notFoundRouter = $notFoundRouter;
+    }
+
+
 }
