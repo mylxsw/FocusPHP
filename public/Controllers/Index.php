@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: mylxsw
- * Date: 15/6/5
- * Time: 23:55
+ * FocusPHP
+ *
+ * @link      http://aicode.cc/
+ * @copyright 管宜尧 <mylxsw@aicode.cc>
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
 namespace Demo\Controllers;

@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: mylxsw
- * Date: 15/6/5
- * Time: 17:05
+ * FocusPHP
+ *
+ * @link      http://aicode.cc/
+ * @copyright 管宜尧 <mylxsw@aicode.cc>
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
 namespace Focus;
@@ -20,6 +21,8 @@ use Focus\Uri\Uri;
 class Server {
 
     private static $_instance = null;
+
+    const VERSION = '0.1.0';
 
     /**
      * @var Router
