@@ -44,18 +44,18 @@ class Server {
         $this->_loader = Loader::instance();
     }
 
-
     /**
-     * 初始化服务器对象
+     * Initialize the server object
      *
      * @return Server
+     * @throws \ErrorException
      */
     public static function init() {
         if (empty(self::$_instance)) {
 
             // 环境检测
             if (version_compare(PHP_VERSION, '5.6.0', '<')) {
-                throw new \RuntimeException('PHP版本过低，请升级为PHP 5.6.0以后版本');
+                throw new \ErrorException('NONSUPPORT_PHP_VERSION');
             }
 
             self::$_instance = new Server();
@@ -64,9 +64,6 @@ class Server {
         return self::$_instance;
     }
 
-    /**
-     * 执行请求处理过程
-     */
     public function run() {
         $this->registerRouter($this->getNotFoundRouter());
 
@@ -79,7 +76,7 @@ class Server {
     }
 
     /**
-     * 添加路由映射规则
+     * register router
      *
      * @param $router
      * @param $params
@@ -89,10 +86,29 @@ class Server {
     }
 
     /**
-     * 注册自动类加载器
+     * register exception handler
      *
-     * @param string $baseDir 项目根目录
-     * @param string $baseNs  根目录的命名空间
+     * @param callable $handler
+     */
+    public function registerExceptionHandler($handler) {
+        set_exception_handler($handler);
+    }
+
+    /**
+     * register error handler
+     *
+     * @param $params      callable
+     * @param $error_types int （E_ALL|E_STRICT）
+     */
+    public function registerErrorHandler($params) {
+        set_error_handler(...$params);
+    }
+
+    /**
+     * register class autoloader
+     *
+     * @param string $baseDir Root directory of the project
+     * @param string $baseNs  Basic namespace
      */
     public function registerAutoloader($baseDir, $baseNs) {
         $baseNs = $baseNs[strlen($baseNs) - 1] == '\\' ? $baseNs : "{$baseNs}\\";

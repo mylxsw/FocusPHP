@@ -33,12 +33,12 @@ class ArrayConfig implements Config {
         }
 
         if (!file_exists($this->_filename)) {
-            throw new \RuntimeException("配置文件不存在");
+            throw new \ErrorException("CONFIG_FILE_NOT_FOUND");
         }
 
         $this->_configs = include $this->_filename;
         if (!is_array($this->_configs)) {
-            throw new \RuntimeException("配置文件格式不合法");
+            throw new \DomainException('INVALID_CONFIG_FORMAT');
         }
     }
 }

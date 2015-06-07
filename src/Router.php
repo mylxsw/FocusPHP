@@ -32,7 +32,7 @@ class Router {
         } else if (is_string($router)) {
             $this->_routers[] = new DefaultRouter($router, ...$params);
         } else {
-            throw new \RuntimeException("不合法的路由规则!");
+            throw new \InvalidArgumentException('INVALID_ROUTER');
         }
     }
 

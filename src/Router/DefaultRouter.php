@@ -27,7 +27,7 @@ class DefaultRouter implements Route {
     public function __construct($key, ...$params) {
         $this->_key = $key;
         if (empty($params[0])) {
-            throw new \RuntimeException("路由参数不合法");
+            throw new \InvalidArgumentException("INVALID_ROUTER_ARGS");
         }
         $this->_params = $params;
     }
@@ -59,7 +59,7 @@ class DefaultRouter implements Route {
         } else if (is_callable($this->_params[0])) {
             $this->_params[0]($request, $response);
         } else {
-            throw new \RuntimeException("路由处理器不合法");
+            throw new \DomainException('INVALID_ROUTER_FUNC');
         }
     }
 
