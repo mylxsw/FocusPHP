@@ -10,6 +10,7 @@
 namespace Focus\MVC;
 
 
+use Focus\Loader;
 use Focus\Request\Request;
 use Focus\Response\Response;
 use Focus\Router\Route;
@@ -87,6 +88,8 @@ class Router implements Route {
                 $params[$index] = $response;
             } else if ($paramClass->implementsInterface('Focus\Request\Session')) {
                 $params[$index] = $request->session();
+            } else if ($paramClass->implementsInterface('Focus\Config\Config')) {
+                $params[$index] = $request->config();
             } else if ($paramClass->implementsInterface('Focus\MVC\Model')) {
                 $params[$index] = $paramClass->newInstance();
                 $params[$index]->init();

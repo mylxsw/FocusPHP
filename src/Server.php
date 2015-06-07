@@ -30,27 +30,18 @@ class Server {
     private $_router;
 
     /**
-     * @var Request
-     */
-    private $_request;
-
-    /**
-     * @var Response
-     */
-    private $_response;
-
-    /**
-     * @var Uri
-     */
-    private $_uri;
-
-    /**
      * @var Router 404 Router
      */
     private $_notFoundRouter;
 
+    /**
+     * @var Loader
+     */
+    private $_loader;
+
     private function __construct() {
         $this->_router = new Router();
+        $this->_loader = Loader::instance();
     }
 
 
@@ -78,9 +69,6 @@ class Server {
      */
     public function run() {
         $this->registerRouter($this->getNotFoundRouter());
-
-        $this->_router->setPathInfo($this->getUri()->getPathInfo());
-        $this->getRequest()->setUri($this->getUri());
 
         $matched = $this->_router->parse();
         foreach ($matched as $router) {
@@ -132,51 +120,42 @@ class Server {
      * @return Request
      */
     public function getRequest() {
-        if (empty($this->_request)) {
-            $this->_request = new HttpRequest();
-        }
-        return $this->_request;
+        return $this->_loader->getRequest();
     }
 
     /**
      * @param Request $request
      */
     public function setRequest(Request $request ) {
-        $this->_request = $request;
+        $this->_loader->setRequest($request);
     }
 
     /**
      * @return Response
      */
     public function getResponse() {
-        if (empty($this->_response)) {
-            $this->_response = new HttpResponse();
-        }
-        return $this->_response;
+        return $this->_loader->getResponse();
     }
 
     /**
      * @param Response $response
      */
     public function setResponse(Response $response ) {
-        $this->_response = $response;
+        $this->_loader->setResponse($response);
     }
 
     /**
      * @return Uri
      */
     public function getUri() {
-        if (empty($this->_uri)) {
-            $this->_uri = new DefaultUri($this->getRequest());
-        }
-        return $this->_uri;
+        return $this->getUri();
     }
 
     /**
      * @param Uri $uri
      */
     public function setUri(Uri $uri ) {
-        $this->_uri = $uri;
+        $this->_loader->setUri($uri);
     }
 
     /**

@@ -10,6 +10,7 @@
 namespace Focus\Uri;
 
 
+use Focus\Loader;
 use Focus\Request\Request;
 
 class DefaultUri implements Uri {
@@ -18,15 +19,6 @@ class DefaultUri implements Uri {
      * @var string|null PATH_INFO
      */
     private $_pathInfo = null;
-
-    /**
-     * @var Request
-     */
-    private $_request;
-
-    public function __construct(Request $request) {
-        $this->_request = $request;
-    }
 
     /**
      * @return string
@@ -43,7 +35,7 @@ class DefaultUri implements Uri {
                         return $this->_pathInfo;
                     }
                 }
-                $this->_pathInfo = trim($this->_request->request('_action_', ''), '/');
+                $this->_pathInfo = trim(Loader::instance()->getRequest()->request('_action_', ''), '/');
             }
         }
 

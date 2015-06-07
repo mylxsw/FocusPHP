@@ -12,6 +12,7 @@ namespace Focus\Request;
 
 
 use Focus\Uri\Uri;
+use Focus\Config\Config;
 
 interface Request {
 
@@ -19,9 +20,12 @@ interface Request {
     /**
      * @return Uri
      */
-    public function getUri();
+    public function uri();
 
-    public function setUri(Uri $uri);
+    /**
+     * @return Config
+     */
+    public function config();
 
     public function get($key, $default = null);
 

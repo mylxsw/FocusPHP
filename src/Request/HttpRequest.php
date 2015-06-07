@@ -10,14 +10,10 @@
 namespace Focus\Request;
 
 
+use Focus\Loader;
 use Focus\Uri\Uri;
 
 class HttpRequest implements Request {
-
-    /**
-     * @var Uri
-     */
-    private $_uri;
 
     /**
      * @var Session
@@ -27,12 +23,15 @@ class HttpRequest implements Request {
     /**
      * @return Uri
      */
-    public function getUri() {
-        return $this->_uri;
+    public function uri() {
+        return Loader::instance()->getUri();
     }
 
-    public function setUri( Uri $uri ) {
-        $this->_uri = $uri;
+    /**
+     * @return \Focus\Config\Config
+     */
+    public function config() {
+        return Loader::instance()->getConfig();
     }
 
     public function get( $key, $default = null ) {
@@ -55,10 +54,6 @@ class HttpRequest implements Request {
      * @return Session
      */
     public function session() {
-        if (empty($this->_session)) {
-            $this->_session = new DefaultSession();
-        }
-
-        return $this->_session;
+        return Loader::instance()->getSession();
     }
 }

@@ -9,8 +9,6 @@
 
 namespace Focus\Router;
 
-
-
 use Focus\Request\Request;
 use Focus\Response\Response;
 
@@ -50,7 +48,7 @@ class DefaultRouter implements Route {
     /**
      * 处理请求
      *
-     * @param Request $request Request Object
+     * @param Request  $request  Request Object
      * @param Response $response Response Object
      *
      * @return void

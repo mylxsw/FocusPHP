@@ -20,8 +20,6 @@ class Router {
      */
     private $_routers = [];
 
-    private $_pathInfo = '';
-
     /**
      * 新增路由规则
      *
@@ -57,12 +55,10 @@ class Router {
         return $matched;
     }
 
-
+    /**
+     * @return string
+     */
     public function getPathInfo() {
-        return $this->_pathInfo;
-    }
-
-    public function setPathInfo($pathInfo) {
-        $this->_pathInfo = $pathInfo;
+        return Loader::instance()->getUri()->getPathInfo();
     }
 } 
