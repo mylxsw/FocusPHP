@@ -9,6 +9,14 @@
             "email": "mylxsw@aicode.cc"
         }
     ],
+    "archive": {
+        "exclude": [
+            "/logs",
+            "/public",
+            "/Makefile",
+            "/nginx.conf"
+        ]
+    },
     "autoload": {
         "psr-4": {
             "Focus\\": "src/"
