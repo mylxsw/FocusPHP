@@ -22,6 +22,11 @@ Loader::instance()->setLoader(new Loader\DefaultLoader());
 $server = Server::init();
 // 注册项目命名空间及根目录
 $server->registerAutoloader(__DIR__, 'Demo');
+$server->registerExceptionHandler(function($exception) {
+    echo "<pre>";
+    echo $exception;
+    echo "</pre>";
+});
 
 // 先注册者优先
 $server->registerRouter(new Router('Demo\Controllers'));
@@ -31,7 +36,6 @@ $server->registerRouter('user', function(
 
     $response->write("hello, world");
 });
-
 
 
 $server->run();

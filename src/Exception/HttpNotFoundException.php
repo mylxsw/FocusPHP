@@ -7,15 +7,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 
-namespace Focus\MVC;
+namespace Focus\Exception;
 
 
-interface Model {
+class HttpNotFoundException extends \RuntimeException {
 
-    /**
-     * Initialize the model
-     *
-     * @return void
-     */
-    public function init();
 } 

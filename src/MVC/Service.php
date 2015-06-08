@@ -10,10 +10,10 @@
 namespace Focus\MVC;
 
 
-interface Model {
+interface Service {
 
     /**
-     * Initialize the model
+     * Initialize the service
      *
      * @return void
      */

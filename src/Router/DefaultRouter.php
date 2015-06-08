@@ -48,12 +48,13 @@ class DefaultRouter implements Route {
     /**
      * 处理请求
      *
-     * @param Request  $request  Request Object
+     * @param Request $request Request Object
      * @param Response $response Response Object
+     * @param mixed $params
      *
      * @return void
      */
-    public function execute( Request $request, Response $response ) {
+    public function execute( Request $request, Response $response, ...$params ) {
         if (is_string($this->_params[0])) {
             $response->write(...$this->_params);
         } else if (is_callable($this->_params[0])) {

@@ -16,15 +16,10 @@ use Focus\Response\Response;
 class NotFoundRouter implements Route {
 
     /**
-     * 判断路由规则是否匹配
-     *
-     * @param string $pathinfo pathinfo
-     * @param int    $index    路由规则索引
-     *
-     * @return bool
+     * @throws \ErrorException
      */
     public function isMatched( $pathinfo, $index ) {
-        return $index == 0;
+        throw new \ErrorException('不支持该方法');
     }
 
     /**
@@ -32,20 +27,23 @@ class NotFoundRouter implements Route {
      *
      * @param Request $request Request Object
      * @param Response $response Response Object
+     * @param mixed $params
      *
      * @return void
      */
-    public function execute( Request $request, Response $response ) {
+    public function execute( Request $request, Response $response, ...$params ) {
         $response->header('HTTP/1.1 404 Not Found');
-        $response->write("Not Found.");
+        if (!empty($params)) {
+            $response->write(...$params);
+        } else {
+            $response->write("Not Found.");
+        }
     }
 
     /**
-     * 是否继续查找路由
-     *
-     * @return bool
+     * @throws \ErrorException
      */
     public function isContinue() {
-        return false;
+        throw new \ErrorException('不支持该方法');
     }
 }

@@ -29,10 +29,11 @@ interface Route {
      *
      * @param Request  $request  Request Object
      * @param Response $response Response Object
+     * @param mixed    $params   Other parameters
      *
      * @return void
      */
-    public function execute(Request $request, Response $response);
+    public function execute(Request $request, Response $response, ...$params);
 
     /**
      * 是否继续查找路由

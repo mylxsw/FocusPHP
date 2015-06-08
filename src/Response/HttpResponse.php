@@ -20,7 +20,9 @@ class HttpResponse implements Response {
     }
 
     public function write( ...$data ) {
-        $this->_buffer += $data;
+        foreach ($data as $_data) {
+            $this->_buffer[] = $_data;
+        }
     }
 
     public function output() {

@@ -10,6 +10,7 @@
 namespace Focus;
 
 
+use Focus\Exception\HttpNotFoundException;
 use Focus\Request\HttpRequest;
 use Focus\Request\Request;
 use Focus\Response\HttpResponse;
@@ -65,11 +66,21 @@ class Server {
     }
 
     public function run() {
-        $this->registerRouter($this->getNotFoundRouter());
-
         $matched = $this->_router->parse();
-        foreach ($matched as $router) {
-            $router->execute($this->getRequest(), $this->getResponse());
+        try {
+            if (empty($matched)) {
+                throw new HttpNotFoundException('没有匹配到可用的路由规则');
+            }
+
+            foreach ($matched as $router) {
+                $router->execute($this->getRequest(), $this->getResponse());
+            }
+        } catch (HttpNotFoundException $e) {
+            $this->getNotFoundRouter()->execute(
+                $this->getRequest(),
+                $this->getResponse(),
+                $e->getMessage()
+            );
         }
 
         $this->getResponse()->output();
@@ -100,7 +111,7 @@ class Server {
      * @param $params      callable
      * @param $error_types int （E_ALL|E_STRICT）
      */
-    public function registerErrorHandler($params) {
+    public function registerErrorHandler(...$params) {
         set_error_handler(...$params);
     }
 
@@ -175,7 +186,7 @@ class Server {
     }
 
     /**
-     * @return Router
+     * @return Router\Route
      */
     public function getNotFoundRouter() {
         if (empty($this->_notFoundRouter)) {

@@ -10,6 +10,7 @@
 namespace Focus\MVC;
 
 
+use Focus\Exception\HttpNotFoundException;
 use Focus\Loader;
 use Focus\Request\Request;
 use Focus\Response\Response;
@@ -28,10 +29,10 @@ class Router implements Route {
     }
 
     /**
-     * 判断路由规则是否匹配
+     * Determine whether the routing rules is matched
      *
      * @param string $pathinfo pathinfo
-     * @param int    $index    路由规则索引
+     * @param int    $index    rule index
      *
      * @return bool
      */
@@ -64,47 +65,59 @@ class Router implements Route {
     }
 
     /**
-     * 处理请求
+     * Processing request
      *
      * @param Request $request Request Object
      * @param Response $response Response Object
+     * @param mixed $params
      *
      * @return void
      */
-    public function execute( Request $request, Response $response ) {
-        $className = "{$this->_controllerNs}\\{$this->_controllerName}";
-        $methodName = $this->_actionName . "Action";
+    public function execute( Request $request, Response $response, ...$params ) {
+        try {
+            $className = "{$this->_controllerNs}\\{$this->_controllerName}";
+            $methodName = $this->_actionName . "Action";
 
-        $classRefl = new \ReflectionClass($className);
-        $methodRefl = $classRefl->getMethod($methodName);
-        $paramsRefl = $methodRefl->getParameters();
-        $params = [];
-        foreach ($paramsRefl as $index => $param) {
-            $paramClass = $param->getClass();
+            $classRefl = new \ReflectionClass($className);
 
-            if ($paramClass->implementsInterface('Focus\Request\Request')) {
-                $params[$index] = $request;
-            } else if ($paramClass->implementsInterface('Focus\Response\Response')) {
-                $params[$index] = $response;
-            } else if ($paramClass->implementsInterface('Focus\Request\Session')) {
-                $params[$index] = $request->session();
-            } else if ($paramClass->implementsInterface('Focus\Config\Config')) {
-                $params[$index] = $request->config();
-            } else if ($paramClass->implementsInterface('Focus\MVC\Model')) {
-                $params[$index] = $paramClass->newInstance();
-                $params[$index]->init();
-            } else {
-                if (!empty($this->_pathParams)) {
-                    $params[$index] = array_shift($this->_pathParams);
+            $instance = $classRefl->newInstance();
+            if (!method_exists($instance, $methodName)) {
+                throw new HttpNotFoundException('请求的方法不存在');
+            }
+
+            $methodRefl = $classRefl->getMethod($methodName);
+            $paramsRefl = $methodRefl->getParameters();
+            $params = [];
+            foreach ($paramsRefl as $index => $param) {
+                $paramClass = $param->getClass();
+
+                if ($paramClass->implementsInterface('Focus\Request\Request')) {
+                    $params[$index] = $request;
+                } else if ($paramClass->implementsInterface('Focus\Response\Response')) {
+                    $params[$index] = $response;
+                } else if ($paramClass->implementsInterface('Focus\Request\Session')) {
+                    $params[$index] = $request->session();
+                } else if ($paramClass->implementsInterface('Focus\Config\Config')) {
+                    $params[$index] = $request->config();
+                } else if ($paramClass->implementsInterface('Focus\MVC\Model')
+                           || $paramClass->implementsInterface('Focus\MVC\Service')) {
+                    $params[$index] = $paramClass->newInstance();
+                    $params[$index]->init();
+                } else {
+                    if (!empty($this->_pathParams)) {
+                        $params[$index] = array_shift($this->_pathParams);
+                    }
                 }
             }
-        }
 
-        return $classRefl->newInstance()->{$methodName}(...$params);
+            return $instance->{$methodName}(...$params);
+        } catch (\ReflectionException $exception) {
+            throw new \RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
+        }
     }
 
     /**
-     * 是否继续查找路由
+     * Whether to continue the search for routes
      *
      * @return bool
      */
