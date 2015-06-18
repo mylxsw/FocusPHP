@@ -14,7 +14,10 @@
             "/logs",
             "/public",
             "/Makefile",
-            "/nginx.conf"
+            "/nginx.conf",
+            "/Vagrantfile",
+            "/vagrant-setup.sh",
+            "/Dockerfile"
         ]
     },
     "autoload": {

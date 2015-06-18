@@ -1,6 +1,10 @@
 # FocusPHP
 FocusPHP is a micro php framework
 
+##备注
+
+数据库文件中，username=admin, password=administrator
+
 
 ###MVC支持
 
