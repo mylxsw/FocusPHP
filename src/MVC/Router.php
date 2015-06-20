@@ -103,6 +103,8 @@ class Router implements Route {
                            || $paramClass->implementsInterface('Focus\MVC\Service')) {
                     $params[$index] = $paramClass->newInstance();
                     $params[$index]->init();
+                } else if ($paramClass->implementsInterface('Focus\MVC\View')) {
+                    $params[$index] = $paramClass->newInstance();
                 } else {
                     if (!empty($this->_pathParams)) {
                         $params[$index] = array_shift($this->_pathParams);
@@ -110,7 +112,13 @@ class Router implements Route {
                 }
             }
 
-            return $instance->{$methodName}(...$params);
+            $res = $instance->{$methodName}(...$params);
+            if ($res instanceof View) {
+                $response->write($res->render());
+            } else if (is_string($res) || is_numeric($res)) {
+                $response->write($res);
+            }
+            return $res;
         } catch (\ReflectionException $exception) {
             throw new \RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
         }
