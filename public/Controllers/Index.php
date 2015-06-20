@@ -11,12 +11,20 @@ namespace Demo\Controllers;
 
 use Demo\Models\DemoModel;
 use Focus\MVC\SimpleView;
+use Focus\MVC\SmpJsonView;
+use Focus\MVC\SmpView;
 use Focus\Request\Request;
 use Focus\Response\Response;
 
 class Index {
     public function indexAction(Request $request, Response $response) {
 
-        return new SimpleView('Views/index', []);
+        return new SmpView('Views/index', []);
+    }
+
+    public function jsonAction(Request $request, Response $response, SmpJsonView $json) {
+        $json->assign('status', 1);
+        $json->assign('message', '操作成功');
+        return $json;
     }
 } 

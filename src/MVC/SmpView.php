@@ -10,7 +10,9 @@
 namespace Focus\MVC;
 
 
-class SimpleView implements View {
+use Focus\Response\Response;
+
+class SmpView implements View {
 
     private $_templateName = 'index.php';
     private $_suffix = '.php';
@@ -119,4 +121,28 @@ class SimpleView implements View {
         $this->_layout = empty($layoutName) ? null : $layoutName . $this->_suffix;
     }
 
+    /**
+     * Write output to response object
+     *
+     * @param Response $response
+     *
+     * @return mixed
+     */
+    public function output( Response $response ) {
+        $response->header('Content-Type:text/html; charset=utf-8');
+        $response->write($this->render());
+    }
+
+    /**
+     * Remove a key from data array
+     *
+     * @param string $key the key to remove
+     *
+     * @return mixed
+     */
+    public function remove( $key ) {
+        if (isset($this->_data[$key])) {
+            unset($this->_data[$key]);
+        }
+    }
 }

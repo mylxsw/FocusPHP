@@ -1,0 +1,90 @@
+<?php
+/**
+ * FocusPHP
+ *
+ * @link      http://aicode.cc/
+ * @copyright 管宜尧 <mylxsw@aicode.cc>
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
+ */
+
+namespace Focus\MVC;
+
+
+use Focus\Response\Response;
+
+class SmpJsonView implements View {
+
+    private $_data = [];
+
+    public function output( Response $response ) {
+        $response->header('Content-Type:text/json; charset=utf-8');
+        $response->write($this->render());
+    }
+
+    /**
+     * View template render
+     *
+     * @param string|null $templateName Template name
+     * @param array $data data for template parser
+     *
+     * @return string
+     */
+    public function render( $templateName = null, $data = [ ] ) {
+        $this->setTemplate($templateName, $data);
+        return json_encode($this->_data);
+    }
+
+    /**
+     * passing data to template parser
+     *
+     * @param string $key data key
+     * @param mixed $value data body
+     *
+     * @return void
+     */
+    public function assign( $key, $value ) {
+        if (empty($key)) {
+            throw new \RuntimeException('ASSIGN_KEY_EMPTY');
+        }
+        $this->_data[$key] = $value;
+    }
+
+    /**
+     * set the template file
+     *
+     * @param string $templateName template name
+     * @param array $data data for template parser
+     *
+     * @return mixed
+     */
+    public function setTemplate( $templateName, $data = [ ] ) {
+        if (!empty($data)) {
+            if (is_array($data)) {
+                $this->_data = array_merge($this->_data, $data);
+            }
+        }
+    }
+
+    /**
+     * view construct method
+     *
+     * @param string|null $templateName template name
+     * @param array $data data for template parser
+     */
+    public function __construct( $templateName = null, $data = [ ] ) {
+        $this->setTemplate($templateName, $data);
+    }
+
+    /**
+     * Remove a key from data array
+     *
+     * @param string $key the key to remove
+     *
+     * @return mixed
+     */
+    public function remove( $key ) {
+        if (isset($this->_data[$key])) {
+            unset($this->_data[$key]);
+        }
+    }
+}

@@ -114,7 +114,7 @@ class Router implements Route {
 
             $res = $instance->{$methodName}(...$params);
             if ($res instanceof View) {
-                $response->write($res->render());
+                $res->output($response);
             } else if (is_string($res) || is_numeric($res)) {
                 $response->write($res);
             }

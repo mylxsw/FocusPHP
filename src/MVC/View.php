@@ -10,6 +10,8 @@
 namespace Focus\MVC;
 
 
+use Focus\Response\Response;
+
 interface View {
 
     /**
@@ -33,6 +35,14 @@ interface View {
     public function assign($key, $value);
 
     /**
+     * Remove a key from data array
+     *
+     * @param string $key the key to remove
+     *
+     * @return mixed
+     */
+    public function remove($key);
+    /**
      * set the template file
      *
      * @param string $templateName template name
@@ -49,5 +59,14 @@ interface View {
      * @param array       $data         data for template parser
      */
     public function __construct($templateName = null, $data = []);
+
+    /**
+     * Write output to response object
+     *
+     * @param Response $response
+     *
+     * @return mixed
+     */
+    public function output(Response $response);
 
 }
