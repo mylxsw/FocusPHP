@@ -36,6 +36,11 @@ interface Request {
     public function cookie($key, $default = null);
 
     /**
+     * @return \Interop\Container\ContainerInterface
+     */
+    public function container();
+
+    /**
      * @return Session
      */
     public function session();

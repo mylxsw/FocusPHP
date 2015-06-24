@@ -11,12 +11,14 @@ namespace Focus\MVC;
 
 
 use Focus\Exception\HttpNotFoundException;
-use Focus\Loader;
+use Focus\Log\LoggerAwareTrait;
 use Focus\Request\Request;
 use Focus\Response\Response;
 use Focus\Router\Route;
 
 class Router implements Route {
+
+    use LoggerAwareTrait;
 
     private $_controllerName = 'index';
     private $_actionName = 'index';
@@ -47,6 +49,9 @@ class Router implements Route {
             if (count($res) > 2) {
                 $this->_pathParams = array_slice($res, 2);
             }
+
+        } else {
+            $this->getLogger()->debug('pathinfo is empty');
         }
 
         // 检查控制器是否存在
@@ -56,6 +61,7 @@ class Router implements Route {
             // 检查方法是否存在，不存则则使用index方法
             if (!method_exists($className, $this->_actionName . 'Action')) {
                 $this->_actionName = 'index';
+                $this->getLogger()->debug('use default action: indexAction');
             }
 
             return true;
@@ -81,8 +87,13 @@ class Router implements Route {
             $classRefl = new \ReflectionClass($className);
 
             $instance = $classRefl->newInstance();
+            if (method_exists($instance, '__init__')) {
+                $instance->__init__();
+                $this->getLogger()->debug("exec: {$className}->__init__");
+            }
             if (!method_exists($instance, $methodName)) {
-                throw new HttpNotFoundException('请求的方法不存在');
+                $this->getLogger()->debug('the request method not exist');
+                throw new HttpNotFoundException('The request method not exist!');
             }
 
             $methodRefl = $classRefl->getMethod($methodName);
@@ -101,7 +112,13 @@ class Router implements Route {
                     $params[$index] = $request->config();
                 } else if ($paramClass->implementsInterface('Focus\MVC\Model')
                            || $paramClass->implementsInterface('Focus\MVC\Service')) {
-                    $params[$index] = $paramClass->newInstance();
+
+                    if ($request->container()->has($paramClass->getName())) {
+                        $object = $request->container()->get($paramClass->getName());
+                    } else {
+                        $object = $paramClass->newInstance();
+                    }
+                    $params[$index] = $object;
                     $params[$index]->init();
                 } else if ($paramClass->implementsInterface('Focus\MVC\View')) {
                     $params[$index] = $paramClass->newInstance();
@@ -114,12 +131,19 @@ class Router implements Route {
 
             $res = $instance->{$methodName}(...$params);
             if ($res instanceof View) {
+                $this->getLogger()->debug('use view object for response');
                 $res->output($response);
             } else if (is_string($res) || is_numeric($res)) {
+                $this->getLogger()->debug('use scalar type for response');
                 $response->write($res);
             }
             return $res;
         } catch (\ReflectionException $exception) {
+            $this->getLogger()->warning(sprintf(
+                'reflection exception: [%s] %s',
+                $exception->getCode(),
+                $exception->getMessage()
+            ));
             throw new \RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
         }
     }

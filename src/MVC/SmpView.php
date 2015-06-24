@@ -10,9 +10,12 @@
 namespace Focus\MVC;
 
 
+use Focus\Log\LoggerAwareTrait;
 use Focus\Response\Response;
 
 class SmpView implements View {
+
+    use LoggerAwareTrait;
 
     private $_templateName = 'index.php';
     private $_suffix = '.php';
@@ -31,10 +34,12 @@ class SmpView implements View {
         $this->setTemplate($templateName, $data);
 
         if (empty($this->_templateName)) {
+            $this->getLogger()->warning('template name is null');
             throw new \RuntimeException('TEMPLATE_IS_NULL');
         }
         $buffer = $this->_parseTemplate($this->_templateName, $this->_data);
         if (!empty($this->_layout)) {
+            $this->getLogger()->debug('loading layout: ' . $this->_layout);
             $buffer = $this->_parseTemplate(
                 $this->_layout,
                 array_merge($this->_data, ['__body__' => $buffer])

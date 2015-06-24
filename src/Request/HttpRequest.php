@@ -10,28 +10,34 @@
 namespace Focus\Request;
 
 
-use Focus\Loader;
 use Focus\Uri\Uri;
+use Focus\Config\Config;
+use Focus\Request\Session;
+use Interop\Container\ContainerInterface;
 
 class HttpRequest implements Request {
 
     /**
-     * @var Session
+     * @var ContainerInterface
      */
-    private $_session = null;
+    private $_container;
+
+    public function __construct(ContainerInterface $container) {
+        $this->_container = $container;
+    }
 
     /**
      * @return Uri
      */
     public function uri() {
-        return Loader::instance()->getUri();
+        return $this->_container->get(Uri::class);
     }
 
     /**
-     * @return \Focus\Config\Config
+     * @return Config
      */
     public function config() {
-        return Loader::instance()->getConfig();
+        return $this->_container->get(Config::class);
     }
 
     public function get( $key, $default = null ) {
@@ -54,6 +60,13 @@ class HttpRequest implements Request {
      * @return Session
      */
     public function session() {
-        return Loader::instance()->getSession();
+        return $this->_container->get(Session::class);
+    }
+
+    /**
+     * @return \Interop\Container\ContainerInterface
+     */
+    public function container() {
+        return $this->_container;
     }
 }

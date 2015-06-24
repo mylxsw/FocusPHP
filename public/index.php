@@ -8,18 +8,25 @@
  */
 namespace Demo;
 
-use Focus\Loader;
+use Focus\BasicContainer;
+use Focus\Container;
 use Focus\MVC\Router;
 use Focus\Request\Request;
 use Focus\Response\Response;
 use Focus\Server;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-// 设置默认的Loader
-Loader::instance()->setLoader(new Loader\DefaultLoader());
+$logger = new Logger('focusphp');
+$logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/focusphp.log'));
 
-$server = Server::init();
+$basicContainer = new BasicContainer();
+$basicContainer->set(LoggerInterface::class, $logger);
+
+$server = Server::init(Container::instance()->setContainer($basicContainer));
 // 注册项目命名空间及根目录
 $server->registerAutoloader(__DIR__, 'Demo');
 $server->registerExceptionHandler(function($exception) {
@@ -36,6 +43,5 @@ $server->registerRouter('user', function(
 
     $response->write("hello, world");
 });
-
 
 $server->run();

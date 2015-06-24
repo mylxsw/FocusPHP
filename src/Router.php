@@ -10,15 +10,30 @@
 namespace Focus;
 
 
+use Focus\Log\LoggerAwareTrait;
 use Focus\Router\DefaultRouter;
 use Focus\Router\Route;
+use Interop\Container\ContainerInterface;
+use Focus\Uri\Uri;
 
 class Router {
+
+    use LoggerAwareTrait;
 
     /**
      * @var Router\Route[]
      */
     private $_routers = [];
+
+    /**
+     * @var ContainerInterface
+     */
+    private $_container;
+
+    public function __construct(ContainerInterface $container) {
+        $this->_container = $container;
+        $this->getLogger()->debug('master router manger loaded');
+    }
 
     /**
      * 新增路由规则
@@ -32,6 +47,7 @@ class Router {
         } else if (is_string($router)) {
             $this->_routers[] = new DefaultRouter($router, ...$params);
         } else {
+            $this->getLogger()->error('add new router failed, not a valid router');
             throw new \InvalidArgumentException('INVALID_ROUTER');
         }
     }
@@ -45,6 +61,7 @@ class Router {
         $matched = [];
         foreach ($this->_routers as $router) {
             if ($router->isMatched($this->getPathInfo(), count($matched))) {
+                $this->getLogger()->debug(sprintf('router %s is matched', get_class($router)));
                 $matched[] = $router;
                 if ($router->isContinue() === false) {
                     break;
@@ -59,6 +76,6 @@ class Router {
      * @return string
      */
     public function getPathInfo() {
-        return Loader::instance()->getUri()->getPathInfo();
+        return $this->_container->get(Uri::class)->getPathInfo();
     }
 } 

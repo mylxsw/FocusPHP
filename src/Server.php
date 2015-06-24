@@ -18,11 +18,14 @@ use Focus\Response\Response;
 use Focus\Router\NotFoundRouter;
 use Focus\Uri\DefaultUri;
 use Focus\Uri\Uri;
+use Interop\Container\ContainerInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 
 class Server {
 
     private static $_instance = null;
-
     const VERSION = '0.1.0';
 
     /**
@@ -36,30 +39,38 @@ class Server {
     private $_notFoundRouter;
 
     /**
-     * @var Loader
+     * @var ContainerInterface
      */
-    private $_loader;
+    private $_container;
 
-    private function __construct() {
-        $this->_router = new Router();
-        $this->_loader = Loader::instance();
+    private function __construct(ContainerInterface $container) {
+        if (is_null($container)) {
+            $container = Container::instance();
+        }
+        $this->_container = $container;
+        $this->_router = $container->get(Router::class);
     }
 
     /**
      * Initialize the server object
      *
+     * @param Container $container
+     *
      * @return Server
      * @throws \ErrorException
      */
-    public static function init() {
+    public static function init(Container $container = null) {
         if (empty(self::$_instance)) {
 
             // 环境检测
             if (version_compare(PHP_VERSION, '5.6.0', '<')) {
                 throw new \ErrorException('NONSUPPORT_PHP_VERSION');
             }
+            if (is_null($container)) {
+                $container = Container::instance();
+            }
 
-            self::$_instance = new Server();
+            self::$_instance = new Server($container->getContainer());
         }
 
         return self::$_instance;
@@ -94,6 +105,8 @@ class Server {
      */
     public function registerRouter($router, ...$params) {
         $this->_router->add($router, ...$params);
+        $this->getLogger()->debug('add new router: '
+                                  . (is_string($router) ? $router : get_class($router)));
     }
 
     /**
@@ -103,16 +116,18 @@ class Server {
      */
     public function registerExceptionHandler($handler) {
         set_exception_handler($handler);
+        $this->getLogger()->debug('register exception handler ok');
     }
 
     /**
      * register error handler
      *
-     * @param $params      callable
-     * @param $error_types int （E_ALL|E_STRICT）
+     * @param callable $params       callable
+     * @param int      $error_types （E_ALL|E_STRICT）
      */
     public function registerErrorHandler(...$params) {
         set_error_handler(...$params);
+        $this->getLogger()->debug('register error handler ok');
     }
 
     /**
@@ -134,7 +149,9 @@ class Server {
                         $baseDir . '/' . substr($class, strlen($baseNs)) . '.php'
                     );
                     if (file_exists($filename)) {
+                        $this->getLogger()->debug('automatic load file ' . $filename);
                         include $filename;
+                        $this->getLogger()->debug("file {$filename} loaded");
                     }
                 }
             },
@@ -147,42 +164,21 @@ class Server {
      * @return Request
      */
     public function getRequest() {
-        return $this->_loader->getRequest();
-    }
-
-    /**
-     * @param Request $request
-     */
-    public function setRequest(Request $request ) {
-        $this->_loader->setRequest($request);
+        return $this->_container->get(Request::class);
     }
 
     /**
      * @return Response
      */
     public function getResponse() {
-        return $this->_loader->getResponse();
-    }
-
-    /**
-     * @param Response $response
-     */
-    public function setResponse(Response $response ) {
-        $this->_loader->setResponse($response);
+        return $this->_container->get(Response::class);
     }
 
     /**
      * @return Uri
      */
     public function getUri() {
-        return $this->getUri();
-    }
-
-    /**
-     * @param Uri $uri
-     */
-    public function setUri(Uri $uri ) {
-        $this->_loader->setUri($uri);
+        return $this->_container->get(Uri::class);
     }
 
     /**
@@ -202,5 +198,10 @@ class Server {
         $this->_notFoundRouter = $notFoundRouter;
     }
 
-
+    /**
+     * @return LoggerInterface
+     */
+    public function getLogger() {
+        return $this->_container->get(LoggerInterface::class);
+    }
 }

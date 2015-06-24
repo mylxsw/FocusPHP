@@ -10,10 +10,14 @@
 namespace Focus\Response;
 
 
+use Interop\Container\ContainerInterface;
+
 class HttpResponse implements Response {
 
     private $_buffer = [];
     private $_headers = [];
+
+    public function __construct(ContainerInterface $container) {}
 
     public function header( $header ) {
         $this->_headers[] = $header;

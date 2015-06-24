@@ -10,9 +10,11 @@
 namespace Focus\Request;
 
 
+use Interop\Container\ContainerInterface;
+
 class DefaultSession implements Session{
 
-    public function __construct() {
+    public function __construct(ContainerInterface $container) {
         session_start();
     }
 
