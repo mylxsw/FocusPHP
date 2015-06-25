@@ -9,22 +9,22 @@
 
 namespace Demo\Controllers;
 
-use Demo\Models\DemoModel;
+use Demo\Libraries\Controller;
+use Demo\Models\Post;
 use Focus\MVC\SimpleView;
-use Focus\MVC\SmpJsonView;
-use Focus\MVC\SmpView;
 use Focus\Request\Request;
-use Focus\Response\Response;
 
-class Index {
-    public function indexAction(Request $request, Response $response) {
+class Index extends Controller {
 
-        return new SmpView('Views/index', []);
+    public function indexAction(Request $request, Post $postModel) {
+        $current = intval($request->get('page', 1));
+
+        $posts = $postModel->getRecentlyPosts($current, 10);
+        $this->assign('posts', $posts['data']);
+        $this->assign('page', $posts['page']);
+
+        $this->assign('parsedown', new \Parsedown());
+        return $this->view('index');
     }
 
-    public function jsonAction(Request $request, Response $response, SmpJsonView $json) {
-        $json->assign('status', 1);
-        $json->assign('message', '操作成功');
-        return $json;
-    }
-} 
+}

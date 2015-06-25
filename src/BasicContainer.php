@@ -32,6 +32,7 @@ use Focus\Log\Logger;
 class BasicContainer implements ContainerInterface {
 
     private $_classes = [];
+    private $_lazy_classes = [];
     private static $_systemClasses = [
         Request::class              => HttpRequest::class,
         Response::class             => HttpResponse::class,
@@ -41,6 +42,19 @@ class BasicContainer implements ContainerInterface {
         Config::class               => [ArrayConfig::class, false],
         LoggerInterface::class      => Logger::class
     ];
+
+    public function __construct(...$config_files) {
+        foreach ($config_files as $file) {
+            if (file_exists($file)) {
+                $config = include $file;
+                if (empty($config) || !is_array($config)) {
+                    continue;
+                }
+
+                $this->_lazy_classes = array_merge($this->_lazy_classes, $config);
+            }
+        }
+    }
 
     /**
      * Finds an entry of the container by its identifier and returns it.
@@ -56,6 +70,7 @@ class BasicContainer implements ContainerInterface {
         if ($this->has($id)) {
             return $this->_classes[$id];
         }
+
         throw new ObjectNotFoundException("object {$id} not found!");
     }
 
@@ -69,6 +84,17 @@ class BasicContainer implements ContainerInterface {
      */
     public function has( $id ) {
         $res = isset($this->_classes[$id]);
+
+        if ($res == false && isset($this->_lazy_classes[$id])) {
+            if (is_callable($this->_lazy_classes[$id])) {
+                $this->_classes[$id] = $this->_lazy_classes[$id]($this);
+            } else {
+                $this->_classes[$id] = $this->_lazy_classes[$id];
+            }
+
+            $res = true;
+        }
+
         if ($res == false && $this->isSystemClass($id)) {
             $res = $this->_loadSystemClass($id);
         }

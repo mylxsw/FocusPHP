@@ -11,11 +11,11 @@ namespace Focus\Config;
 
 
 class ArrayConfig implements Config {
-    private $_filename;
+    private $_filenames = [];
     private $_configs = [];
 
-    public function __construct($filename = null) {
-        $this->_filename = $filename;
+    public function __construct(...$filenames) {
+        $this->_filenames = $filenames;
         $this->reload();
     }
 
@@ -28,17 +28,22 @@ class ArrayConfig implements Config {
     }
 
     public function reload() {
-        if (empty($this->_filename)) {
+        if (empty($this->_filenames)) {
             return;
         }
 
-        if (!file_exists($this->_filename)) {
-            throw new \ErrorException("CONFIG_FILE_NOT_FOUND");
-        }
+        $this->_configs = [];
+        foreach ($this->_filenames as $filename) {
+            if (!file_exists($filename)) {
+                throw new \ErrorException("CONFIG_FILE_NOT_FOUND");
+            }
 
-        $this->_configs = include $this->_filename;
-        if (!is_array($this->_configs)) {
-            throw new \DomainException('INVALID_CONFIG_FORMAT');
+            $configs = include $filename;
+            if (!is_array($configs)) {
+                throw new \DomainException('INVALID_CONFIG_FORMAT');
+            }
+
+            $this->_configs = array_merge($this->_configs, $configs);
         }
     }
 }

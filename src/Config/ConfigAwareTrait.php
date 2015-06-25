@@ -6,21 +6,20 @@
  * @copyright 管宜尧 <mylxsw@aicode.cc>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
-namespace Demo\Models;
 
-use Focus\MVC\Model;
+namespace Focus\Config;
 
-class DemoModel implements Model {
-    public function getName() {
-        return "Tomcat";
-    }
+
+use Focus\Container;
+
+trait ConfigAwareTrait {
 
     /**
-     * Model初始化
+     * 获取Config实例
      *
-     * @return void
+     * @return Config
      */
-    public function init() {
-
+    public function getConfig() {
+        return Container::instance()->get(Config::class);
     }
-}
+} 

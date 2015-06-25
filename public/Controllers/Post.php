@@ -9,14 +9,31 @@
 
 namespace Demo\Controllers;
 
-use Focus\Response\Response;
+use Demo\Libraries\Controller;
+use Focus\Request\Request;
 
-class Post {
+class Post extends Controller {
 
-    public function listAction(Response $response, \Demo\Services\Post $postService) {
-        $posts = $postService->getAll();
-        foreach ($posts as $id => $post) {
-            $response->write("<li><span>{$id}</span><span>{$post['title']}</span></li>");
-        }
+    public function showAction( Request $request, \Demo\Models\Post $postModel ) {
+        $id   = intval( $request->get( 'id' ) );
+        $post = $postModel->getPostById( $id );
+
+        $this->assign( 'post', $post );
+        $this->assign( 'parsedown', new \Parsedown() );
+
+        return $this->view( 'post' );
+    }
+
+    public function listAction(Request $request, \Demo\Models\Post $postModel) {
+        $current = intval($request->get('page', 1));
+        $cat = intval($request->get('cat'));
+
+        $posts = $postModel->getPostsInCate($cat, $current);
+        $this->assign('posts', $posts['data']);
+        $this->assign('page', $posts['page']);
+        $this->assign('cat', $cat);
+
+        $this->assign('parsedown', new \Parsedown());
+        return $this->view('index');
     }
 } 

@@ -87,4 +87,13 @@ class SmpJsonView implements View {
             unset($this->_data[$key]);
         }
     }
+
+    /**
+     * Get all data as array
+     *
+     * @return []
+     */
+    public function data() {
+        return $this->_data;
+    }
 }

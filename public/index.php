@@ -20,11 +20,11 @@ use Psr\Log\LoggerInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$logger = new Logger('focusphp');
-$logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/focusphp.log'));
+//$logger = new Logger('focusphp');
+//$logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/focusphp.log'));
 
-$basicContainer = new BasicContainer();
-$basicContainer->set(LoggerInterface::class, $logger);
+$basicContainer = new BasicContainer(__DIR__ . '/Configs/container.php');
+//$basicContainer->set(LoggerInterface::class, $logger);
 
 $server = Server::init(Container::instance()->setContainer($basicContainer));
 // 注册项目命名空间及根目录
@@ -36,12 +36,15 @@ $server->registerExceptionHandler(function($exception) {
 });
 
 // 先注册者优先
-$server->registerRouter(new Router('Demo\Controllers'));
-$server->registerRouter('user', function(
-    Request $request,
-    Response $response) {
-
-    $response->write("hello, world");
-});
+$server->registerRouter(new Router('Demo\Controllers',[
+    'post'  => 'post/show',
+    'list'  => 'post/list'
+]));
+//$server->registerRouter('user', function(
+//    Request $request,
+//    Response $response) {
+//
+//    $response->write("hello, world");
+//});
 
 $server->run();

@@ -69,4 +69,11 @@ interface View {
      */
     public function output(Response $response);
 
+    /**
+     * Get all data as array
+     *
+     * @return []
+     */
+    public function data();
+
 }

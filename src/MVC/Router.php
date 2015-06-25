@@ -25,9 +25,11 @@ class Router implements Route {
     private $_pathParams = [];
 
     private $_controllerNs = '';
+    private $_rewriteRules;
 
-    public function __construct($controllerNs) {
+    public function __construct($controllerNs, $rewriteRules = []) {
         $this->_controllerNs = rtrim($controllerNs, '\\');
+        $this->_rewriteRules = $rewriteRules;
     }
 
     /**
@@ -39,11 +41,15 @@ class Router implements Route {
      * @return bool
      */
     public function isMatched( $pathinfo, $index) {
+        if (is_array($this->_rewriteRules) && isset($this->_rewriteRules[$pathinfo])) {
+            $pathinfo = $this->_rewriteRules[$pathinfo];
+        }
+
         if (!empty($pathinfo)) {
             $res = explode('/', $pathinfo);
-            $this->_controllerName = ucfirst($res[0]);
+            $this->_controllerName = empty($res[0]) ? $this->_controllerName : ucfirst($res[0]);
             if (count($res) >= 2) {
-                $this->_actionName = $res[1];
+                $this->_actionName = empty($res[1]) ? $this->_actionName : $res[1];
             }
 
             if (count($res) > 2) {
@@ -56,6 +62,7 @@ class Router implements Route {
 
         // 检查控制器是否存在
         $className = "{$this->_controllerNs}\\{$this->_controllerName}";
+
         if (class_exists($className)) {
 
             // 检查方法是否存在，不存则则使用index方法

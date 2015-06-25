@@ -19,6 +19,9 @@ class SmpView implements View {
 
     private $_templateName = 'index.php';
     private $_suffix = '.php';
+    /**
+     * @var []
+     */
     private $_data = [];
     private $_layout;
 
@@ -149,5 +152,14 @@ class SmpView implements View {
         if (isset($this->_data[$key])) {
             unset($this->_data[$key]);
         }
+    }
+
+    /**
+     * Get all data as array
+     *
+     * @return []
+     */
+    public function data() {
+        return $this->_data;
     }
 }
