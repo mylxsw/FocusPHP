@@ -10,6 +10,7 @@
 namespace Demo\Libraries;
 
 use Demo\Models\Navigator;
+use Demo\Models\Tags;
 use Focus\MVC\SmpView;
 
 class Controller {
@@ -37,18 +38,20 @@ class Controller {
      * @return SmpView
      */
     public function view($templateName) {
-        $this->view->setTemplate("Views/{$templateName}");
+        $this->view->setTemplate(BASE_PATH . "/Views/{$templateName}");
+        $this->view->setLayout(BASE_PATH . '/Views/_layouts/default');
         $this->view->assign('__sidebars__', [
-            (new SmpView(null, $this->view->data(), null))->render('Views/_includes/about'),
-            (new SmpView(null, $this->view->data(), null))->render('Views/_includes/recently'),
-            (new SmpView(null, $this->view->data(), null))->render('Views/_includes/weibo')
+            (new SmpView(null, $this->view->data(), null))->render(BASE_PATH . '/Views/_includes/about'),
+            (new SmpView(null, $this->view->data(), null))->render(BASE_PATH . '/Views/_includes/recently',
+                ['__tags__' => (new Tags())->getAllTags()]),
+            (new SmpView(null, $this->view->data(), null))->render(BASE_PATH . '/Views/_includes/weibo')
         ]);
 
         $this->view->assign('__nav__', (new SmpView(
             null,
             ['__navigator__'=>(new Navigator())->getNavTrees(0, 'top')],
             null
-        ))->render('Views/_includes/navigator', $this->view->data()));
+        ))->render(BASE_PATH . '/Views/_includes/navigator', $this->view->data()));
 
         return $this->view;
     }

@@ -21,10 +21,11 @@ return [
         $dbname     = $container->get(Config::class)->get('db.dbname', '');
         $host       = $container->get(Config::class)->get('db.host', '127.0.0.1');
         $charset    = $container->get(Config::class)->get('db.charset', 'utf8');
-        $user       = $container->get(Config::class)->get('user', 'root');
-        $password   = $container->get(Config::class)->get('password', '');
+        $user       = $container->get(Config::class)->get('db.user', 'root');
+        $password   = $container->get(Config::class)->get('db.password', '');
+        $port       = $container->get(Config::class)->get('db.port', 3306);
 
-        $pdo = new \PDO("{$driver}:dbname={$dbname};host={$host};charset={$charset}", $user, $password);
+        $pdo = new \PDO("{$driver}:dbname={$dbname};host={$host};port={$port};charset={$charset}", $user, $password);
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         return $pdo;

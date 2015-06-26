@@ -20,6 +20,8 @@ use Psr\Log\LoggerInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+define('BASE_PATH', __DIR__);
+
 //$logger = new Logger('focusphp');
 //$logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/focusphp.log'));
 

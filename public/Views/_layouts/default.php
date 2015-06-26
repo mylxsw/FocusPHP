@@ -13,6 +13,10 @@
 
     <link rel="stylesheet" href="http://cdn.amazeui.org/amazeui/2.4.0/css/amazeui.min.css"/>
     <link rel="stylesheet" href="Views/assets/css/style.css" />
+
+    <!-- 新浪验证 -->
+    <meta property="wb:webmaster" content="4818ce9c6d28b7a1" />
+    <meta property="og:image" content=""/>
 </head>
 <body>
 <header class="am-topbar">

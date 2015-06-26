@@ -43,6 +43,8 @@ class DefaultUri implements Uri {
                         $this->_pathInfo = trim($res[0]);
                         return $this->_pathInfo;
                     }
+                    $this->_pathInfo = $_SERVER['REQUEST_URI'];
+                    return $this->_pathInfo;
                 }
                 $this->_pathInfo = trim($this->_container->get(Request::class)->request('_action_', ''), '/');
             }

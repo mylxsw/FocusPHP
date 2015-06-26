@@ -20,7 +20,7 @@ class Router implements Route {
 
     use LoggerAwareTrait;
 
-    private $_controllerName = 'index';
+    private $_controllerName = 'Index';
     private $_actionName = 'index';
     private $_pathParams = [];
 
@@ -41,9 +41,7 @@ class Router implements Route {
      * @return bool
      */
     public function isMatched( $pathinfo, $index) {
-        if (is_array($this->_rewriteRules) && isset($this->_rewriteRules[$pathinfo])) {
-            $pathinfo = $this->_rewriteRules[$pathinfo];
-        }
+        $pathinfo = $this->_urlRewrite($pathinfo);
 
         if (!empty($pathinfo)) {
             $res = explode('/', $pathinfo);
@@ -55,7 +53,6 @@ class Router implements Route {
             if (count($res) > 2) {
                 $this->_pathParams = array_slice($res, 2);
             }
-
         } else {
             $this->getLogger()->debug('pathinfo is empty');
         }
@@ -75,6 +72,26 @@ class Router implements Route {
         }
 
         return false;
+    }
+
+    private function _urlRewrite($pathinfo) {
+        foreach ($this->_rewriteRules as $pattern => $dest) {
+            if (preg_match($pattern, $pathinfo)) {
+                $pathinfo = preg_replace($pattern, $dest, $pathinfo);
+                if (strpos($pathinfo, '?') !== false) {
+                    $exp = explode('?', $pathinfo, 2);
+                    $pathinfo = $exp[0];
+                    parse_str($exp[1], $params);
+                    foreach($params as $key=>$val) {
+                        $_GET[$key] = $val;
+                    }
+                }
+                
+                break;
+            }
+        }
+        
+        return $pathinfo;
     }
 
     /**

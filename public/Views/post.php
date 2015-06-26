@@ -1,6 +1,6 @@
 <article class="blog-main">
     <h3 class="am-article-title blog-title">
-        <a href="post?id=<?=$post['id'];?>"><?=$post['title'];?></a>
+        <a href="article/<?=$post['id'];?>.html"><?=$post['title'];?></a>
     </h3>
     <h4 class="am-article-meta blog-meta">by <a href=""><?=$post['author'];?></a>
         posted on <?php echo date('Y/m/d', $post['publish_date']);?> under <a href="#">MIT</a></h4>

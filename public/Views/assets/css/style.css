@@ -11,6 +11,9 @@
 .blog-main {
   padding: 20px 0;
 }
+.blog-main img {
+  max-width: 95%;
+}
 .blog-title {
   margin: 10px 0 20px 0;
 }
