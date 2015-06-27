@@ -10,6 +10,7 @@
 namespace Demo\Controllers;
 
 use Demo\Libraries\Controller;
+use Demo\Models\Category;
 use Demo\Models\Post;
 use Focus\MVC\SimpleView;
 use Focus\Request\Request;
@@ -24,7 +25,17 @@ class Index extends Controller {
         $this->assign('page', $posts['page']);
 
         $this->assign('parsedown', new \Parsedown());
+        $this->assign('catModel', new Category());
         return $this->view('index');
     }
 
+    public function aboutAction() {
+        $this->assign('__navcur__', '走过路过');
+        return $this->view('about');
+    }
+
+    public function adminAction() {
+        header('Location: http://agiledev.sinaapp.com/admin.php');
+        exit();
+    }
 }

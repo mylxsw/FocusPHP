@@ -14,6 +14,20 @@
 .blog-main img {
   max-width: 95%;
 }
+.blog-main .am-article-lead {
+  text-indent: 20px;
+  font-style: italic;
+}
+.ac-msg-sorry .am-slider {
+  margin-top: 20px;
+}
+.ac-ad {
+  padding: 20px 0;
+}
+.ac-page-info {
+  margin: auto 20px;
+  line-height: 2;
+}
 .blog-title {
   margin: 10px 0 20px 0;
 }

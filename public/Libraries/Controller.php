@@ -44,7 +44,8 @@ class Controller {
             (new SmpView(null, $this->view->data(), null))->render(BASE_PATH . '/Views/_includes/about'),
             (new SmpView(null, $this->view->data(), null))->render(BASE_PATH . '/Views/_includes/recently',
                 ['__tags__' => (new Tags())->getAllTags()]),
-            (new SmpView(null, $this->view->data(), null))->render(BASE_PATH . '/Views/_includes/weibo')
+            (new SmpView(null, $this->view->data(), null))->render(BASE_PATH . '/Views/_includes/weibo'),
+            //(new SmpView(null, $this->view->data(), null))->render(BASE_PATH . '/Views/_includes/recommend')
         ]);
 
         $this->view->assign('__nav__', (new SmpView(

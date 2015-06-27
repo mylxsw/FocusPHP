@@ -90,6 +90,31 @@ class Post implements Model {
             ]
         ];
     }
+    
+    public function getPostsByTag($tagId, $current, $count = 10) {
+        $where = 'id IN (SELECT re.article_id FROM ar_article_tag re WHERE re.tag_id=:tag)';
+        $params = [':tag' => $tagId];
+        $total = $this->getPostCount($where, $params);
+
+        list($total, $offset, $count, $page_nums, $current)
+            = Tools::createPageInfo($total, $count, $current);
+
+        $sql = "SELECT * FROM `ar_article` WHERE {$where} ORDER BY `publish_date` DESC LIMIT {$offset}, {$count}";
+        $stat = $this->getPDO()->prepare($sql);
+        $stat->execute($params);
+
+        return [
+            'data'  => $stat->fetchAll(\PDO::FETCH_ASSOC),
+            'page'  => [
+                'total'     => $total,
+                'offset'    => $offset,
+                'count'     => $count,
+                'page_nums' => $page_nums,
+                'current'   => $current
+            ]
+        ];  
+    
+    }
 
     /**
      * 获取所有帖子数目

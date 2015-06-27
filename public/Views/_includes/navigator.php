@@ -2,7 +2,7 @@
     <li <?php echo !isset($__navcur__) ? 'class="am-active"' : '';?>><a href="#">首页</a></li>
     <?php foreach ($__navigator__ as $nav): ?>
         <?php if (isset($nav['sub'])) { ?>
-            <li class="am-dropdown" data-am-dropdown>
+            <li class="am-dropdown" data-am-dropdown >
                 <a href="javascript:;" class="am-dropdown-toggle" data-am-dropdown-toggle >
                     <?=$nav['name'];?>
                     <span class="am-icon-caret-down"></span>
@@ -15,7 +15,7 @@
                 </ul>
             </li>
         <?php } else { ?>
-            <li><a href="<?=$nav['url'];?>" <?php echo substr($nav['url'], 0, 7) == 'http://' ? ' target="_blank" ':''; ?>><?=$nav['name'];?></a></li>
+    <li <?php echo isset($__navcur__) && $__navcur__ == $nav['name'] ? 'class="am-active"':'';?>><a href="<?=$nav['url'];?>" <?php echo substr($nav['url'], 0, 7) == 'http://' ? ' target="_blank" ':''; ?>><?=$nav['name'];?></a></li>
         <?php } ?>
     <?php endforeach;?>
 </ul>

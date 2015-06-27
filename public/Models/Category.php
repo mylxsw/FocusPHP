@@ -13,7 +13,7 @@ namespace Demo\Models;
 use Demo\Libraries\PDOAwareTrait;
 use Focus\MVC\Model;
 
-class Tags implements Model {
+class Category implements Model {
 
     use PDOAwareTrait;
     /**
@@ -25,17 +25,11 @@ class Tags implements Model {
         // TODO: Implement init() method.
     }
 
-    public function getAllTags() {
-        $stat = $this->getPDO()->query('SELECT * FROM `ar_tag` WHERE isvalid=1');
+    public function getCategoriesByArticleId($articleId) {
+        $sql = 'SELECT * FROM `ar_category` WHERE id in (SELECT category_id FROM `ar_article_category` WHERE article_id=:article_id)';
+        $stat = $this->getPDO()->prepare($sql);
+        $stat->execute(['article_id' => $articleId]);
+
         return $stat->fetchAll(\PDO::FETCH_ASSOC);
     }
-    
-    public function getTagByName($tagName) {
-    
-        $stat = $this->getPDO()->prepare('SELECT * FROM `ar_tag` WHERE isvalid=1 AND name=:name');
-        $stat->execute([':name'=> $tagName]);
-        
-        return $stat->fetch(\PDO::FETCH_ASSOC);
-    }
-
 }

@@ -80,7 +80,7 @@ class Server {
         $matched = $this->_router->parse();
         try {
             if (empty($matched)) {
-                throw new HttpNotFoundException('没有匹配到可用的路由规则');
+                throw new HttpNotFoundException('请求的页面不存在');
             }
 
             foreach ($matched as $router) {
