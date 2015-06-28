@@ -1,5 +1,5 @@
 (function() {
-
+    // 标签随机颜色
     var tagColors = ['am-badge-primary', 'am-badge-secondary', 'am-badge-success', 'am-badge-warning', 'am-badge-danger', ''];
     
     $(".am-panel-bd .am-badge").each(function() {
@@ -7,6 +7,7 @@
         $(this).addClass(tagColors[index]);
     });
 
+    // 找不到页面消息，展示照片
     if ($(".ac-msg-sorry").length) {
         var max_photo_id = 27;
         var photo_url = 'http://source.aicode.cc/photograph/';
@@ -30,6 +31,7 @@
         '<ul class="am-slides">' + img_list + '</ul></div>');
     }
 
+    // 搜索 - 使用百度站内搜索
     if ($("form[role=search]").length) {
         $("form[role=search]").on('submit', function() {
             var input = $('form[role=search] input[name=wd]');
@@ -38,6 +40,7 @@
         });
     }
 
+    // 鼠标经过Logo自动展开侧边栏
     $(".am-topbar-brand").hover(function() {
         $(this).find('a').click();
     });

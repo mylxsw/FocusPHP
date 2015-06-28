@@ -35,7 +35,7 @@ class Index extends Controller {
     }
 
     public function adminAction() {
-        header('Location: http://agiledev.sinaapp.com/admin.php');
+        header('Location: http://admin.aicode.cc');
         exit();
     }
 }

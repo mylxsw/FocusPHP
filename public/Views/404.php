@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title><?php echo (isset($post) && isset($post['title'])) ? $post['title'] : 'AICODE'; ?></title>
+    <title>404 - AICODE.CC</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -11,12 +11,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
     <meta name="description" content="管宜尧的博客 - AICODE.CC">
     <meta name="author" content="管宜尧, mylxsw">
-    <meta name="keywords" content="<?php
-    if (isset($post) && !empty($post['title'])) {
-        echo $post['title'];
-    } else {
-        echo "技术博客";
-    }?>, PHP, Linux, AiCode, 管宜尧">
+    <meta name="keywords" content="PHP, Linux, AiCode, 管宜尧">
 
     <base href="http://<?=$_SERVER['HTTP_HOST'];?>">
 
@@ -24,9 +19,6 @@
     <link rel="stylesheet" href="Views/assets/css/style.css" />
     <link rel="shortcut icon" href="http://source.aicode.cc/logo/favicon.png">
 
-    <!-- 新浪验证 -->
-    <meta property="wb:webmaster" content="4818ce9c6d28b7a1" />
-    <meta property="og:image" content="<?php echo (isset($post) && isset($post['feature_img'])) ? $post['feature_img'] : ''; ?>"/>
 </head>
 <body>
 <header class="am-topbar">
@@ -62,32 +54,22 @@
             class="am-icon-bars"></span></button>
 
     <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
-        <?=$__nav__?>
         <form action="https://www.baidu.com/s" method="get" class="am-topbar-form am-topbar-left am-form-inline am-topbar-right" role="search">
             <div class="am-form-group">
                 <input type="text" name="wd" class="am-form-field am-input-sm" placeholder="搜索文章">
             </div>
             <button type="submit" class="am-btn am-btn-default am-btn-sm">搜索</button>
         </form>
-
     </div>
 </header>
-
 <div class="am-g am-g-fixed blog-g-fixed">
-    <div class="am-u-md-8 am-animation-fade">
-        <?=$__body__?>
+<div class="am-g">
+    <div class="am-u-sm-12">
+        <h2 class="am-text-center am-text-xxxl am-margin-top-lg">404. Not Found</h2>
+        <p class="am-text-center">没有找到你要的页面</p>
+        <p class="ac-msg-sorry" style="padding: 30px;"></p>
     </div>
-
-    <div class="am-u-md-4 blog-sidebar">
-        <div class="am-panel-group">
-            <?php if (isset($__sidebars__) && is_array($__sidebars__)):foreach ($__sidebars__ as $sidebar): ?>
-                <?=$sidebar?>
-            <?php endforeach;endif;?>
-            <div class="ac-ad">
-                <img src="http://sae.sina.com.cn/doc/_images/poweredby-120x33px.png" style="float:right" />
-            </div>
-        </div>
-    </div>
+</div>
 
 </div>
 <footer class="blog-footer">

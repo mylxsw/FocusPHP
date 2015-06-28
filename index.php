@@ -21,13 +21,15 @@ $server->registerExceptionHandler(function($exception) {
     echo "</pre>";
 });
 
+$server->setNotFoundRouter(new \Demo\Libraries\NotFoundRouter());
+
 // 先注册者优先
 $server->registerRouter(new \Focus\MVC\Router('Demo\Controllers',[
     '/^article\/([0-9]+).html$/'    => 'post/show?id=$1',
     '/^category\/([0-9]+).html$/'   => 'post/list?cat=$1',
     '/^tag\/(.*?).html$/'           => 'post/tag?tag=$1',
     '/^about.html$/'                => 'index/about',
-    '/^admin$/'                     => 'index/admin'
+    '/^管宜尧$/'                     => 'index/admin'
 ]));
 
 $server->run();

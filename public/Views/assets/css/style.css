@@ -8,6 +8,10 @@
     font-size: 1.4rem;
   }
 }
+.ac-article-license {
+  float: right;
+  margin: 10px;
+}
 .blog-main {
   padding: 20px 0;
 }
