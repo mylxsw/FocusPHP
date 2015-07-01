@@ -1,7 +1,0 @@
-name: mylxsw
-version: 1
-
-handle:
-
-- rewrite: if(!is_dir() && !is_file() && path~"^(.*)\.(css|js|jpg|png|gif)$") goto "public/$1.$2"
-- rewrite: if(!is_dir() && !is_file() && path~"^(.*)$") goto "index.php/$1"

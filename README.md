@@ -1,6 +1,12 @@
 # FocusPHP
 FocusPHP is a micro php framework
 
+##TODO
+
+- 完善docker开发环境
+- 增加后台管理
+- 框架与项目分离
+
 ##备注
 
 数据库文件中，username=admin, password=administrator

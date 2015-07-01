@@ -11,13 +11,7 @@
     ],
     "archive": {
         "exclude": [
-            "/logs",
-            "/public",
-            "/Makefile",
-            "/nginx.conf",
-            "/Vagrantfile",
-            "/vagrant-setup.sh",
-            "/Dockerfile"
+            "/Makefile"
         ]
     },
     "autoload": {
@@ -27,8 +21,6 @@
     },
     "require": {
         "container-interop/container-interop": "dev-master",
-        "psr/log": "^1.0@dev",
-        "monolog/monolog": "^1.14@dev",
-        "erusev/parsedown": "dev-master"
+        "psr/log": "^1.0@dev"
     }
 }
