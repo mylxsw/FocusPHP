@@ -1,6 +1,8 @@
 {
     "name": "aicode/focusphp",
     "description": "FocusPHP 微框架",
+    "type": "library",
+    "keywords": ["focus", "php", "framework"],
     "minimum-stability": "dev",
     "license": "MIT",
     "authors": [
@@ -21,6 +23,7 @@
     },
     "require": {
         "container-interop/container-interop": "dev-master",
-        "psr/log": "^1.0@dev"
+        "psr/log": "^1.0@dev",
+        "php": ">=5.6"
     }
 }
