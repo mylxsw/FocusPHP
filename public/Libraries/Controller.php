@@ -46,7 +46,7 @@ class Controller {
                 ['__tags__' => (new Tags())->getAllTags()]),
             (new SmpView(null, $this->view->data(), null))->render(BASE_PATH . '/Views/_includes/weibo'),
             //(new SmpView(null, $this->view->data(), null))->render(BASE_PATH . '/Views/_includes/recommend')
-            //(new SmpView(null, $this->view->data(), null))->render(BASE_PATH . '/Views/_includes/github')
+            (new SmpView(null, $this->view->data(), null))->render(BASE_PATH . '/Views/_includes/recent-comment')
         ]);
 
         $this->view->assign('__nav__', (new SmpView(

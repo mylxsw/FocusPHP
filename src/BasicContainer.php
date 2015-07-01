@@ -102,7 +102,7 @@ class BasicContainer implements ContainerInterface {
     }
 
     /**
-     * whether the class name is a system class
+     * check whether the class name is system class
      *
      * @param string $id class name
      *

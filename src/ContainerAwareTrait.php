@@ -18,4 +18,10 @@ trait ContainerAwareTrait {
     public function getContainer() {
         return Container::instance();
     }
+
+    public function __call($name, $arguments) {
+        if (strlen($name) > 3 && strncmp($name, 'get', 3) === 0) {
+            return $this->getContainer()->get(substr($name, 3));
+        }
+    }
 } 

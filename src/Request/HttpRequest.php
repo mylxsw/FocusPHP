@@ -21,9 +21,11 @@ class HttpRequest implements Request {
      * @var ContainerInterface
      */
     private $_container;
+    private $_needEscape = false;
 
     public function __construct(ContainerInterface $container) {
         $this->_container = $container;
+        $this->_needEscape = !get_magic_quotes_gpc();
     }
 
     /**
@@ -41,19 +43,30 @@ class HttpRequest implements Request {
     }
 
     public function get( $key, $default = null ) {
-        return empty($_GET[$key]) ? $default : $_GET[$key];
+        return empty($_GET[$key]) ? $default : $this->_escape($_GET[$key]);
     }
 
     public function post( $key, $default = null ) {
-        return empty($_POST[$key]) ? $default : $_POST[$key];
+        return empty($_POST[$key]) ? $default : $this->_escape($_POST[$key]);
     }
 
     public function request( $key, $default = null ) {
-        return empty($_REQUEST[$key]) ? $default : $_REQUEST[$key];
+        return empty($_REQUEST[$key]) ? $default : $this->_escape($_REQUEST[$key]);
     }
 
     public function cookie( $key, $default = null ) {
-        return empty($_COOKIE[$key]) ? $default : $_COOKIE[$key];
+        return empty($_COOKIE[$key]) ? $default : $this->_escape($_COOKIE[$key]);
+    }
+
+    /**
+     * escape string value
+     *
+     * @param $value
+     *
+     * @return string
+     */
+    private function _escape($value) {
+        return $this->_needEscape ? addslashes($value) : $value;
     }
 
     /**
