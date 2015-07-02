@@ -30,7 +30,7 @@ interface View {
      * @param string $key   data key
      * @param mixed  $value data body
      *
-     * @return void
+     * @return View
      */
     public function assign($key, $value);
 
@@ -39,7 +39,7 @@ interface View {
      *
      * @param string $key the key to remove
      *
-     * @return mixed
+     * @return View
      */
     public function remove($key);
     /**
@@ -48,7 +48,7 @@ interface View {
      * @param string $templateName template name
      * @param array  $data         data for template parser
      *
-     * @return mixed
+     * @return View
      */
     public function setTemplate($templateName, $data = []);
 

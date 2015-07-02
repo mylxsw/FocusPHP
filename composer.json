@@ -13,7 +13,8 @@
     ],
     "archive": {
         "exclude": [
-            "/Makefile"
+            "/Makefile",
+            ".git/"
         ]
     },
     "autoload": {

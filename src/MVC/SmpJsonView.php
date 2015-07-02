@@ -40,13 +40,15 @@ class SmpJsonView implements View {
      * @param string $key data key
      * @param mixed $value data body
      *
-     * @return void
+     * @return View
      */
     public function assign( $key, $value ) {
         if (empty($key)) {
             throw new \RuntimeException('ASSIGN_KEY_EMPTY');
         }
         $this->_data[$key] = $value;
+
+        return $this;
     }
 
     /**
@@ -55,7 +57,7 @@ class SmpJsonView implements View {
      * @param string $templateName template name
      * @param array $data data for template parser
      *
-     * @return mixed
+     * @return View
      */
     public function setTemplate( $templateName, $data = [ ] ) {
         if (!empty($data)) {
@@ -63,6 +65,8 @@ class SmpJsonView implements View {
                 $this->_data = array_merge($this->_data, $data);
             }
         }
+
+        return $this;
     }
 
     /**
@@ -80,12 +84,14 @@ class SmpJsonView implements View {
      *
      * @param string $key the key to remove
      *
-     * @return mixed
+     * @return View
      */
     public function remove( $key ) {
         if (isset($this->_data[$key])) {
             unset($this->_data[$key]);
         }
+
+        return $this;
     }
 
     /**
