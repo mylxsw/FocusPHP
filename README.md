@@ -12,6 +12,10 @@ FocusPHP is a micro php framework
 数据库文件中，username=admin, password=administrator
 
 
+##安装使用
+
+    composer require aicode/focusphp
+
 ###MVC支持
 
 框架本身可选的对`MVC`提供了支持，只需要在创建`Focus\Server`对象时注册`Focus\MVC\Router`对象即可。
