@@ -1,6 +1,8 @@
 # FocusPHP
 FocusPHP is a micro php framework
 
+[![Build Status](https://travis-ci.org/mylxsw/FocusPHP.svg?branch=master)](https://travis-ci.org/mylxsw/FocusPHP)
+
 ##TODO
 
 - 完善docker开发环境
