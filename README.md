@@ -6,6 +6,7 @@ FocusPHP is a micro php framework
 - 完善docker开发环境
 - 增加后台管理
 - 框架与项目分离
+- 完善单元测试，使用Travis CI持续集成
 
 ##备注
 
