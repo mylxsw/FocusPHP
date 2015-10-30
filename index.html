@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Focusphp : FocusPHP is a micro php framework">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Focusphp</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/mylxsw/FocusPHP">View on GitHub</a>
+
+          <h1 id="project_title">Focusphp</h1>
+          <h2 id="project_tagline">FocusPHP is a micro php framework</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/mylxsw/FocusPHP/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/mylxsw/FocusPHP/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="focusphp" class="anchor" href="#focusphp" aria-hidden="true"><span class="octicon octicon-link"></span></a>FocusPHP</h1>
+
+<p>FocusPHP is a micro php framework</p>
+
+<p><a href="https://travis-ci.org/mylxsw/FocusPHP"><img src="https://travis-ci.org/mylxsw/FocusPHP.svg?branch=master" alt="Build Status"></a></p>
+
+<h2>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>TODO</h2>
+
+<ul>
+<li>完善docker开发环境</li>
+<li>增加后台管理</li>
+<li>框架与项目分离</li>
+<li>完善单元测试，使用Travis CI持续集成</li>
+</ul>
+
+<h2>
+<a id="备注" class="anchor" href="#%E5%A4%87%E6%B3%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>备注</h2>
+
+<p>数据库文件中，username=admin, password=administrator</p>
+
+<h2>
+<a id="安装使用" class="anchor" href="#%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>安装使用</h2>
+
+<pre><code>composer require aicode/focusphp
+</code></pre>
+
+<h3>
+<a id="mvc支持" class="anchor" href="#mvc%E6%94%AF%E6%8C%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>MVC支持</h3>
+
+<p>框架本身可选的对<code>MVC</code>提供了支持，只需要在创建<code>Focus\Server</code>对象时注册<code>Focus\MVC\Router</code>对象即可。</p>
+
+<pre><code>$server-&gt;registerRouter(new Focus\MVC\Router('Demo\Controllers'));
+</code></pre>
+
+<p>创建<code>Focus\MVC\Router</code>是需要提供控制器命名空间作为参数，这样框架就回到该命名空间下寻找适合处理当前请求的控制器。</p>
+
+<h4>
+<a id="视图对象" class="anchor" href="#%E8%A7%86%E5%9B%BE%E5%AF%B9%E8%B1%A1" aria-hidden="true"><span class="octicon octicon-link"></span></a>视图对象</h4>
+
+<p>视图类需要实现<code>Focus\MVC\View</code>接口，框架内置了一套简单的视图实现<code>Focus\MVC\SimpleView</code>，
+该实现使用<code>.php</code>文件作为视图文件模板，在模板文件中，直接使用原始的PHP语法即可。</p>
+
+<p>默认视图<code>Focus\MVC\SimpleView</code>提供了layout支持。</p>
+
+<p>隐藏的模板变量</p>
+
+<table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__body__</code></td>
+<td>解析模板后的内容，该变量只在layout中可用</td>
+</tr>
+<tr>
+<td><code>__data__</code></td>
+<td>给模板对象传递的字符串数据（无key）</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="框架异常消息" class="anchor" href="#%E6%A1%86%E6%9E%B6%E5%BC%82%E5%B8%B8%E6%B6%88%E6%81%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>框架异常消息</h3>
+
+<table>
+<thead>
+<tr>
+<th>消息</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>INVALID_ROUTER</td>
+<td>路由不合法</td>
+</tr>
+<tr>
+<td>INVALID_ROUTER_ARGS</td>
+<td>路由参数不合法</td>
+</tr>
+<tr>
+<td>INVALID_ROUTER_FUNC</td>
+<td>路由规则执行函数不合法</td>
+</tr>
+<tr>
+<td>NONSUPPORT_PHP_VERSION</td>
+<td>PHP版本不支持，请使用5.6.0以上版本</td>
+</tr>
+<tr>
+<td>CONFIG_FILE_NOT_FOUND</td>
+<td>配置文件不存在</td>
+</tr>
+<tr>
+<td>INVALID_CONFIG_FORMAT</td>
+<td>不合法的配置文件格式</td>
+</tr>
+</tbody>
+</table>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Focusphp maintained by <a href="https://github.com/mylxsw">mylxsw</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
