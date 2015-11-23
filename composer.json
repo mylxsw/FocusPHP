@@ -23,7 +23,7 @@
         }
     },
     "require": {
-        "container-interop/container-interop": "dev-master",
+        "container-interop/container-interop": "^1.1.0",
         "psr/log": "^1.0@dev",
         "php": ">=5.6"
     }
