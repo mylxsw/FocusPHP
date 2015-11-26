@@ -82,4 +82,14 @@ class HttpRequest implements Request {
     public function container() {
         return $this->_container;
     }
+
+    /**
+     * 判断是否是XMLHttpRequest
+     *
+     * @return bool
+     */
+    public function isXMLHttpRequest() {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+        && strtoupper($_SERVER['HTTP_X_REQUESTED_WITH']) == 'XMLHTTPREQUEST';
+    }
 }
