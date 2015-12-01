@@ -118,7 +118,7 @@ class HttpRequest implements Request
      */
     public function redirect($url, $temporary = true)
     {
-        header("Loaction: {$url}", true, $temporary ? 302 : 301);
+        header("Location: {$url}", true, $temporary ? 302 : 301);
         return '';
     }
 }
