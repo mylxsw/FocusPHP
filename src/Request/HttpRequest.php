@@ -4,7 +4,8 @@
  *
  * @link      http://aicode.cc/
  * @copyright 管宜尧 <mylxsw@aicode.cc>
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the
+ *            LICENSE file)
  */
 
 namespace Focus\Request;
@@ -15,7 +16,8 @@ use Focus\Config\Config;
 use Focus\Request\Session;
 use Interop\Container\ContainerInterface;
 
-class HttpRequest implements Request {
+class HttpRequest implements Request
+{
 
     /**
      * @var ContainerInterface
@@ -23,39 +25,48 @@ class HttpRequest implements Request {
     private $_container;
     private $_needEscape = false;
 
-    public function __construct(ContainerInterface $container) {
-        $this->_container = $container;
+    public function __construct(ContainerInterface $container)
+    {
+        $this->_container  = $container;
         $this->_needEscape = !get_magic_quotes_gpc();
     }
 
     /**
      * @return Uri
      */
-    public function uri() {
+    public function uri()
+    {
         return $this->_container->get(Uri::class);
     }
 
     /**
      * @return Config
      */
-    public function config() {
+    public function config()
+    {
         return $this->_container->get(Config::class);
     }
 
-    public function get( $key, $default = null ) {
+    public function get($key, $default = null)
+    {
         return empty($_GET[$key]) ? $default : $this->_escape($_GET[$key]);
     }
 
-    public function post( $key, $default = null ) {
+    public function post($key, $default = null)
+    {
         return empty($_POST[$key]) ? $default : $this->_escape($_POST[$key]);
     }
 
-    public function request( $key, $default = null ) {
-        return empty($_REQUEST[$key]) ? $default : $this->_escape($_REQUEST[$key]);
+    public function request($key, $default = null)
+    {
+        return empty($_REQUEST[$key]) ? $default
+            : $this->_escape($_REQUEST[$key]);
     }
 
-    public function cookie( $key, $default = null ) {
-        return empty($_COOKIE[$key]) ? $default : $this->_escape($_COOKIE[$key]);
+    public function cookie($key, $default = null)
+    {
+        return empty($_COOKIE[$key]) ? $default
+            : $this->_escape($_COOKIE[$key]);
     }
 
     /**
@@ -65,21 +76,24 @@ class HttpRequest implements Request {
      *
      * @return string
      */
-    private function _escape($value) {
+    private function _escape($value)
+    {
         return $this->_needEscape ? addslashes($value) : $value;
     }
 
     /**
      * @return Session
      */
-    public function session() {
+    public function session()
+    {
         return $this->_container->get(Session::class);
     }
 
     /**
      * @return \Interop\Container\ContainerInterface
      */
-    public function container() {
+    public function container()
+    {
         return $this->_container;
     }
 
@@ -88,8 +102,23 @@ class HttpRequest implements Request {
      *
      * @return bool
      */
-    public function isXMLHttpRequest() {
+    public function isXMLHttpRequest()
+    {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
         && strtoupper($_SERVER['HTTP_X_REQUESTED_WITH']) == 'XMLHTTPREQUEST';
+    }
+
+    /**
+     * 页面跳转
+     *
+     * @param string    $url
+     * @param bool|true $temporary 暂时or永久
+     *
+     * @return string
+     */
+    public function redirect($url, $temporary = true)
+    {
+        header("Loaction: {$url}", true, $temporary ? 302 : 301);
+        return '';
     }
 }
