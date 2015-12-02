@@ -4,7 +4,8 @@
  *
  * @link      http://aicode.cc/
  * @copyright 管宜尧 <mylxsw@aicode.cc>
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the
+ *            LICENSE file)
  */
 
 namespace Focus\Response;
@@ -12,26 +13,32 @@ namespace Focus\Response;
 
 use Interop\Container\ContainerInterface;
 
-class HttpResponse implements Response {
+class HttpResponse implements Response
+{
 
-    private $_buffer = [];
+    private $_buffer  = [];
     private $_headers = [];
 
-    public function __construct(ContainerInterface $container) {}
-
-    public function header( $header ) {
-        $this->_headers[] = $header;
+    public function __construct(ContainerInterface $container)
+    {
     }
 
-    public function write( ...$data ) {
+    public function header($header, $code = 200, $replace = true)
+    {
+        $this->_headers[] = [$header, $code, $replace];
+    }
+
+    public function write(...$data)
+    {
         foreach ($data as $_data) {
             $this->_buffer[] = $_data;
         }
     }
 
-    public function output() {
+    public function output()
+    {
         foreach ($this->_headers as $header) {
-            header($header);
+            header($header[0], $header[2], $header[1]);
         }
 
         foreach ($this->_buffer as $buffer) {

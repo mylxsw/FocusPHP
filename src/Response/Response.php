@@ -12,7 +12,7 @@ namespace Focus\Response;
 
 interface Response {
 
-    public function header($header);
+    public function header($header, $code = 200, $replace = true);
     public function write(...$data);
     public function output();
 } 
