@@ -78,7 +78,16 @@ class HttpRequest implements Request
      */
     private function _escape($value)
     {
-        return $this->_needEscape ? addslashes($value) : $value;
+        if (!$this->_needEscape) {
+            return $value;
+        }
+
+        if (is_array($value)) {
+            return array_map(function($n) {
+                return addslashes($n);
+            }, $value);
+        }
+        return addslashes($value);
     }
 
     /**
