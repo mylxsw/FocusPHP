@@ -1,25 +1,26 @@
 # FocusPHP
+
 FocusPHP is a micro php framework
 
 [![Build Status](https://travis-ci.org/mylxsw/FocusPHP.svg?branch=master)](https://travis-ci.org/mylxsw/FocusPHP)
 
-##TODO
+## TODO
 
 - 完善docker开发环境
 - 增加后台管理
 - 框架与项目分离
 - 完善单元测试，使用Travis CI持续集成
 
-##备注
+## 备注
 
 数据库文件中，username=admin, password=administrator
 
 
-##安装使用
+## 安装使用
 
     composer require aicode/focusphp
 
-###MVC支持
+### MVC支持
 
 框架本身可选的对`MVC`提供了支持，只需要在创建`Focus\Server`对象时注册`Focus\MVC\Router`对象即可。
 
@@ -27,7 +28,7 @@ FocusPHP is a micro php framework
 
 创建`Focus\MVC\Router`是需要提供控制器命名空间作为参数，这样框架就回到该命名空间下寻找适合处理当前请求的控制器。
 
-####视图对象
+#### 视图对象
 
 视图类需要实现`Focus\MVC\View`接口，框架内置了一套简单的视图实现`Focus\MVC\SimpleView`，
 该实现使用`.php`文件作为视图文件模板，在模板文件中，直接使用原始的PHP语法即可。
@@ -42,7 +43,7 @@ FocusPHP is a micro php framework
 | `__data__`       | 给模板对象传递的字符串数据（无key）
 
 
-###框架异常消息
+### 框架异常消息
 
 | 消息                       | 含义
 |---------------------------|----------
@@ -52,3 +53,9 @@ FocusPHP is a micro php framework
 | NONSUPPORT_PHP_VERSION    | PHP版本不支持，请使用5.6.0以上版本
 | CONFIG_FILE_NOT_FOUND     | 配置文件不存在
 | INVALID_CONFIG_FORMAT     | 不合法的配置文件格式
+
+### 日志
+
+如果定义了`FOCUS_DEBUG`常量,并且该常量的值为true,则启用框架日志,框架日志将合并到应用的debug日志中, 默认情况下是不开启框架的日志的.
+
+> 框架记录的所有日志均为debug日志

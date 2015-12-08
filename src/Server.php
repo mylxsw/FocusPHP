@@ -105,7 +105,8 @@ class Server {
      */
     public function registerRouter($router, ...$params) {
         $this->_router->add($router, ...$params);
-        $this->getLogger()->debug('add new router: '
+        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+            $this->getLogger()->debug('add new router: '
                                   . (is_string($router) ? $router : get_class($router)));
     }
 
@@ -116,7 +117,8 @@ class Server {
      */
     public function registerExceptionHandler($handler) {
         set_exception_handler($handler);
-        $this->getLogger()->debug('register exception handler ok');
+        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+            $this->getLogger()->debug('register exception handler ok');
     }
 
     /**
@@ -127,7 +129,8 @@ class Server {
      */
     public function registerErrorHandler(...$params) {
         set_error_handler(...$params);
-        $this->getLogger()->debug('register error handler ok');
+        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+            $this->getLogger()->debug('register error handler ok');
     }
 
     /**
@@ -149,9 +152,13 @@ class Server {
                         $baseDir . '/' . substr($class, strlen($baseNs)) . '.php'
                     );
                     if (file_exists($filename)) {
-                        $this->getLogger()->debug('automatic load file ' . $filename);
+                        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+                            $this->getLogger()->debug('automatic load file ' . $filename);
+
                         include $filename;
-                        $this->getLogger()->debug("file {$filename} loaded");
+
+                        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+                            $this->getLogger()->debug("file {$filename} loaded");
                     }
                 }
             },

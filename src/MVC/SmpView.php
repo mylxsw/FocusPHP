@@ -37,12 +37,16 @@ class SmpView implements View {
         $this->setTemplate($templateName, $data);
 
         if (empty($this->_templateName)) {
-            $this->getLogger()->warning('template name is null');
+            if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+                $this->getLogger()->debug('template name is null');
+
             throw new \RuntimeException('TEMPLATE_IS_NULL');
         }
         $buffer = $this->_parseTemplate($this->_templateName, $this->_data);
         if (!empty($this->_layout)) {
-            $this->getLogger()->debug('loading layout: ' . $this->_layout);
+            if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+                $this->getLogger()->debug('loading layout: ' . $this->_layout);
+
             $buffer = $this->_parseTemplate(
                 $this->_layout,
                 array_merge($this->_data, ['__body__' => $buffer])

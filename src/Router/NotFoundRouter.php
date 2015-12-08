@@ -35,7 +35,9 @@ class NotFoundRouter implements Route {
      * @return void
      */
     public function execute( Request $request, Response $response, ...$params ) {
-        $this->getLogger()->debug('404 - Not Found');
+        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+            $this->getLogger()->debug('404 - Not Found');
+
         $response->header('HTTP/1.1 404 Not Found');
         if (!empty($params)) {
             $response->write(...$params);

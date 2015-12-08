@@ -54,7 +54,8 @@ class Router implements Route {
                 $this->_pathParams = array_slice($res, 2);
             }
         } else {
-            $this->getLogger()->debug('pathinfo is empty');
+            if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+                $this->getLogger()->debug('pathinfo is empty');
         }
 
         // 检查控制器是否存在
@@ -65,7 +66,8 @@ class Router implements Route {
             // 检查方法是否存在，不存则则使用index方法
             if (!method_exists($className, $this->_actionName . 'Action')) {
                 $this->_actionName = 'index';
-                $this->getLogger()->debug('use default action: indexAction');
+                if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+                    $this->getLogger()->debug('use default action: indexAction');
             }
 
             return true;
@@ -97,11 +99,11 @@ class Router implements Route {
     /**
      * Processing request
      *
-     * @param Request $request Request Object
-     * @param Response $response Response Object
-     * @param mixed $params
+     * @param Request  $request
+     * @param Response $response
+     * @param mixed    ...$params
      *
-     * @return void
+     * @return mixed
      */
     public function execute( Request $request, Response $response, ...$params ) {
         try {
@@ -113,10 +115,13 @@ class Router implements Route {
             $instance = $classRefl->newInstance();
             if (method_exists($instance, '__init__')) {
                 $instance->__init__();
-                $this->getLogger()->debug("exec: {$className}->__init__");
+                if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+                    $this->getLogger()->debug("exec: {$className}->__init__");
             }
             if (!method_exists($instance, $methodName)) {
-                $this->getLogger()->debug('the request method not exist');
+                if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+                    $this->getLogger()->debug('the request method not exist');
+
                 throw new HttpNotFoundException('The request method not exist!');
             }
 
@@ -155,19 +160,24 @@ class Router implements Route {
 
             $res = $instance->{$methodName}(...$params);
             if ($res instanceof View) {
-                $this->getLogger()->debug('use view object for response');
+                if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+                    $this->getLogger()->debug('use view object for response');
+
                 $res->output($response);
             } else if (is_string($res) || is_numeric($res)) {
-                $this->getLogger()->debug('use scalar type for response');
+                if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+                    $this->getLogger()->debug('use scalar type for response');
+
                 $response->write($res);
             }
             return $res;
         } catch (\ReflectionException $exception) {
-            $this->getLogger()->warning(sprintf(
-                'reflection exception: [%s] %s',
-                $exception->getCode(),
-                $exception->getMessage()
-            ));
+            if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+                $this->getLogger()->debug(sprintf(
+                    'reflection exception: [%s] %s',
+                    $exception->getCode(),
+                    $exception->getMessage()
+                ));
             throw new \RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
