@@ -4,7 +4,8 @@
  *
  * @link      http://aicode.cc/
  * @copyright 管宜尧 <mylxsw@aicode.cc>
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the
+ *            LICENSE file)
  */
 namespace Focus\Router;
 
@@ -12,7 +13,8 @@ namespace Focus\Router;
 use Focus\Request\Request;
 use Focus\Response\Response;
 
-interface Route {
+interface Route
+{
 
     /**
      * 判断路由规则是否匹配
@@ -22,7 +24,7 @@ interface Route {
      *
      * @return bool
      */
-    public function isMatched($pathinfo, $index);
+    public function isMatched(\string $pathinfo, \int $index): \bool;
 
     /**
      * 处理请求
@@ -40,5 +42,5 @@ interface Route {
      *
      * @return bool
      */
-    public function isContinue();
+    public function isContinue(): \bool;
 } 

@@ -19,7 +19,7 @@ trait ConfigAwareTrait {
      *
      * @return Config
      */
-    public function getConfig() {
+    public function getConfig(): Config {
         return Container::instance()->get(Config::class);
     }
 } 

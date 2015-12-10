@@ -16,7 +16,8 @@ trait LoggerAwareTrait {
     /**
      * @return LoggerInterface
      */
-    protected function getLogger() {
+    protected function getLogger(): LoggerInterface
+    {
         return Container::instance()->get(LoggerInterface::class);
     }
 } 

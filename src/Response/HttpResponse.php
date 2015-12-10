@@ -23,7 +23,7 @@ class HttpResponse implements Response
     {
     }
 
-    public function header($header, $code = 200, $replace = true)
+    public function header(\string $header, \int $code = 200, \bool $replace = true)
     {
         $this->_headers[] = [$header, $code, $replace];
     }

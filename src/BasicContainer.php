@@ -4,7 +4,8 @@
  *
  * @link      http://aicode.cc/
  * @copyright 管宜尧 <mylxsw@aicode.cc>
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the
+ *            LICENSE file)
  */
 
 namespace Focus;
@@ -29,21 +30,23 @@ use Focus\Config\Config;
 use Focus\Config\ArrayConfig;
 use Focus\Log\Logger;
 
-class BasicContainer implements ContainerInterface {
+class BasicContainer implements ContainerInterface
+{
 
-    private $_classes = [];
-    private $_lazy_classes = [];
+    private        $_classes       = [];
+    private        $_lazy_classes  = [];
     private static $_systemClasses = [
-        Request::class              => HttpRequest::class,
-        Response::class             => HttpResponse::class,
-        Session::class              => DefaultSession::class,
-        Uri::class                  => DefaultUri::class,
-        Router::class               => Router::class,
-        Config::class               => [ArrayConfig::class, false],
-        LoggerInterface::class      => Logger::class
+        Request::class         => HttpRequest::class,
+        Response::class        => HttpResponse::class,
+        Session::class         => DefaultSession::class,
+        Uri::class             => DefaultUri::class,
+        Router::class          => Router::class,
+        Config::class          => [ArrayConfig::class, false],
+        LoggerInterface::class => Logger::class
     ];
 
-    public function __construct(...$config_files) {
+    public function __construct(\string ...$config_files)
+    {
         foreach ($config_files as $file) {
             if (file_exists($file)) {
                 $config = include $file;
@@ -51,7 +54,8 @@ class BasicContainer implements ContainerInterface {
                     continue;
                 }
 
-                $this->_lazy_classes = array_merge($this->_lazy_classes, $config);
+                $this->_lazy_classes =
+                    array_merge($this->_lazy_classes, $config);
             }
         }
     }
@@ -66,7 +70,8 @@ class BasicContainer implements ContainerInterface {
      *
      * @return mixed Entry.
      */
-    public function get( $id ) {
+    public function get($id)
+    {
         if ($this->has($id)) {
             return $this->_classes[$id];
         }
@@ -75,14 +80,15 @@ class BasicContainer implements ContainerInterface {
     }
 
     /**
-     * Returns true if the container can return an entry for the given identifier.
-     * Returns false otherwise.
+     * Returns true if the container can return an entry for the given
+     * identifier. Returns false otherwise.
      *
      * @param string $id Identifier of the entry to look for.
      *
      * @return boolean
      */
-    public function has( $id ) {
+    public function has($id): \bool
+    {
         $res = isset($this->_classes[$id]);
 
         if ($res == false && isset($this->_lazy_classes[$id])) {
@@ -98,6 +104,7 @@ class BasicContainer implements ContainerInterface {
         if ($res == false && $this->isSystemClass($id)) {
             $res = $this->_loadSystemClass($id);
         }
+
         return $res;
     }
 
@@ -108,13 +115,17 @@ class BasicContainer implements ContainerInterface {
      *
      * @return bool
      */
-    public function isSystemClass($id) {
+    public function isSystemClass(\string $id): \bool
+    {
         return isset(self::$_systemClasses[$id]);
     }
 
 
-    private function _loadSystemClass($id) {
-        if (is_array(self::$_systemClasses[$id]) && self::$_systemClasses[$id][1] === false) {
+    private function _loadSystemClass(\string $id): \bool
+    {
+        if (is_array(self::$_systemClasses[$id])
+            && self::$_systemClasses[$id][1] === false
+        ) {
             $object = new self::$_systemClasses[$id];
         } else {
             $object = new self::$_systemClasses[$id]($this);
@@ -128,13 +139,15 @@ class BasicContainer implements ContainerInterface {
     /**
      * set an object
      *
-     * @param $id
-     * @param $object
+     * @param string $id
+     * @param        $object
      *
      * @return BasicContainer
      */
-    public function set($id, $object) {
+    public function set(\string $id, $object)
+    {
         $this->_classes[$id] = $object;
+
         return $this;
     }
 }

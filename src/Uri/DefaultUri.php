@@ -32,7 +32,8 @@ class DefaultUri implements Uri {
     /**
      * @return string
      */
-    public function getPathInfo() {
+    public function getPathInfo(): \string
+    {
         if (is_null($this->_pathInfo)) {
             if (!empty($_SERVER['PATH_INFO'])) {
                 $this->_pathInfo = trim($_SERVER['PATH_INFO'], '/');

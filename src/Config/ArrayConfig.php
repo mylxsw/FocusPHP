@@ -4,30 +4,36 @@
  *
  * @link      http://aicode.cc/
  * @copyright 管宜尧 <mylxsw@aicode.cc>
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the
+ *            LICENSE file)
  */
 
 namespace Focus\Config;
 
 
-class ArrayConfig implements Config {
+class ArrayConfig implements Config
+{
     private $_filenames = [];
-    private $_configs = [];
+    private $_configs   = [];
 
-    public function __construct(...$filenames) {
+    public function __construct(\string ...$filenames)
+    {
         $this->_filenames = $filenames;
         $this->reload();
     }
 
-    public function get( $key, $default = null ) {
+    public function get(\string $key, $default = null)
+    {
         return isset($this->_configs[$key]) ? $this->_configs[$key] : $default;
     }
 
-    public function set( $key, $value ) {
+    public function set(\string $key, $value)
+    {
         $this->_configs[$key] = $value;
     }
 
-    public function reload() {
+    public function reload()
+    {
         if (empty($this->_filenames)) {
             return;
         }

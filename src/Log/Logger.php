@@ -26,8 +26,8 @@ class Logger extends AbstractLogger {
      *
      * @return null
      */
-    public function log( $level, $message, array $context = array() ) {
-        //echo "<!-- {$message} -->" . PHP_EOL;
-        syslog(LOG_LOCAL7, $message);
+    public function log($level, $message, array $context = array()) {
+        // echo "<!-- {$message} -->" . PHP_EOL;
+        // syslog(LOG_LOCAL7, $message);
     }
 }

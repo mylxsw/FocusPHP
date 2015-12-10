@@ -12,13 +12,13 @@ namespace Focus\Request;
 
 interface Session {
 
-    public function get($key, $default = null);
+    public function get(\string $key, $default = null);
 
-    public function set($key, $value);
+    public function set(\string $key, $value);
 
-    public function getId();
+    public function getId(): \string;
 
-    public function setId($id);
+    public function setId(\string $id);
 
     public function clear();
 

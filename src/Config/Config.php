@@ -10,9 +10,9 @@
 namespace Focus\Config;
 
 interface Config {
-    public function get($key, $default = null);
+    public function get(\string $key, $default = null);
 
-    public function set($key, $value);
+    public function set(\string $key, $value);
 
     public function reload();
 } 

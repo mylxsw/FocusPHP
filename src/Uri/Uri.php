@@ -14,5 +14,5 @@ interface Uri {
     /**
      * @return string
      */
-    public function getPathInfo();
+    public function getPathInfo(): \string;
 } 

@@ -33,7 +33,8 @@ class SmpView implements View {
      *
      * @return string
      */
-    public function render( $templateName = null, $data = [ ] ) {
+    public function render(\string $templateName = null, array $data = [] ): \string
+    {
         $this->setTemplate($templateName, $data);
 
         if (empty($this->_templateName)) {
@@ -56,7 +57,8 @@ class SmpView implements View {
         return $buffer;
     }
 
-    private function _parseTemplate($templateName, $data) {
+    private function _parseTemplate(\string $templateName = null, array $data = []): \string
+    {
         if (!file_exists($templateName)) {
             if (isset($data['__body__'])) {
                 return $data['__body__'];
@@ -82,7 +84,8 @@ class SmpView implements View {
      *
      * @return View
      */
-    public function assign( $key, $value ) {
+    public function assign(\string $key, $value): View
+    {
         if (empty($key)) {
             throw new \RuntimeException('ASSIGN_KEY_EMPTY');
         }
@@ -99,7 +102,8 @@ class SmpView implements View {
      *
      * @return View
      */
-    public function setTemplate( $templateName, $data = [ ] ) {
+    public function setTemplate(\string $templateName = null, array $data = []): View
+    {
         if (!empty($templateName)) {
             $this->_templateName = $templateName . $this->_suffix;
         }
@@ -122,7 +126,8 @@ class SmpView implements View {
      * @param array       $data         data for template parser
      * @param string|null $layout       layout name
      */
-    public function __construct( $templateName = null, $data = [ ], $layout = 'Views/_layouts/default') {
+    public function __construct(\string $templateName = null, array $data = [ ], $layout = 'Views/_layouts/default')
+    {
         $this->setTemplate($templateName, $data);
         $this->setLayout($layout);
     }
@@ -132,7 +137,8 @@ class SmpView implements View {
      *
      * @param string|null $layoutName layout name
      */
-    public function setLayout($layoutName) {
+    public function setLayout(\string $layoutName)
+    {
         $this->_layout = empty($layoutName) ? null : $layoutName . $this->_suffix;
     }
 
@@ -143,7 +149,8 @@ class SmpView implements View {
      *
      * @return mixed
      */
-    public function output( Response $response ) {
+    public function output(Response $response)
+    {
         $response->header('Content-Type:text/html; charset=utf-8');
         $response->write($this->render());
     }
@@ -155,7 +162,8 @@ class SmpView implements View {
      *
      * @return View
      */
-    public function remove( $key ) {
+    public function remove(\string $key): View
+    {
         if (isset($this->_data[$key])) {
             unset($this->_data[$key]);
         }
@@ -168,7 +176,8 @@ class SmpView implements View {
      *
      * @return []
      */
-    public function data() {
+    public function data(): array
+    {
         return $this->_data;
     }
 }

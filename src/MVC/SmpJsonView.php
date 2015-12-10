@@ -16,7 +16,7 @@ class SmpJsonView implements View {
 
     private $_data = [];
 
-    public function output( Response $response ) {
+    public function output(Response $response) {
         $response->header('Content-Type:text/json; charset=utf-8');
         $response->write($this->render());
     }
@@ -29,7 +29,8 @@ class SmpJsonView implements View {
      *
      * @return string
      */
-    public function render( $templateName = null, $data = [ ] ) {
+    public function render(\string $templateName = null, array $data = []): \string
+    {
         $this->setTemplate($templateName, $data);
         return json_encode($this->_data);
     }
@@ -42,7 +43,8 @@ class SmpJsonView implements View {
      *
      * @return View
      */
-    public function assign( $key, $value ) {
+    public function assign(\string $key, $value ): View
+    {
         if (empty($key)) {
             throw new \RuntimeException('ASSIGN_KEY_EMPTY');
         }
@@ -59,7 +61,8 @@ class SmpJsonView implements View {
      *
      * @return View
      */
-    public function setTemplate( $templateName, $data = [ ] ) {
+    public function setTemplate(\string $templateName = null, array $data = []): View
+    {
         if (!empty($data)) {
             if (is_array($data)) {
                 $this->_data = array_merge($this->_data, $data);
@@ -75,7 +78,8 @@ class SmpJsonView implements View {
      * @param string|null $templateName template name
      * @param array $data data for template parser
      */
-    public function __construct( $templateName = null, $data = [ ] ) {
+    public function __construct(\string $templateName = null, array $data = [])
+    {
         $this->setTemplate($templateName, $data);
     }
 
@@ -86,7 +90,8 @@ class SmpJsonView implements View {
      *
      * @return View
      */
-    public function remove( $key ) {
+    public function remove(\string $key): View
+    {
         if (isset($this->_data[$key])) {
             unset($this->_data[$key]);
         }
@@ -99,7 +104,8 @@ class SmpJsonView implements View {
      *
      * @return []
      */
-    public function data() {
+    public function data(): array
+    {
         return $this->_data;
     }
 }

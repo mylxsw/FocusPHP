@@ -18,7 +18,8 @@ trait RequestAwareTrait {
     /**
      * @return Request
      */
-    public function getRequest() {
+    public function getRequest(): Request
+    {
         return Container::instance()->get(Request::class);
     }
 } 

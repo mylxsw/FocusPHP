@@ -18,7 +18,7 @@ trait SessionAwareTrait {
     /**
      * @return Session
      */
-    public function getSession() {
+    public function getSession(): Session {
         return Container::instance()->get(Session::class);
     }
 } 

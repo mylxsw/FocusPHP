@@ -22,7 +22,7 @@ interface View {
      *
      * @return string
      */
-    public function render($templateName = null, $data = []);
+    public function render(\string $templateName = null, array $data = []): \string;
 
     /**
      * passing data to template parser
@@ -32,7 +32,7 @@ interface View {
      *
      * @return View
      */
-    public function assign($key, $value);
+    public function assign(\string $key, $value): View;
 
     /**
      * Remove a key from data array
@@ -41,7 +41,7 @@ interface View {
      *
      * @return View
      */
-    public function remove($key);
+    public function remove(\string $key): View;
     /**
      * set the template file
      *
@@ -50,7 +50,7 @@ interface View {
      *
      * @return View
      */
-    public function setTemplate($templateName, $data = []);
+    public function setTemplate(\string $templateName = null, array $data = []): View;
 
     /**
      * view construct method
@@ -58,7 +58,7 @@ interface View {
      * @param string|null $templateName template name
      * @param array       $data         data for template parser
      */
-    public function __construct($templateName = null, $data = []);
+    public function __construct(\string $templateName = null, array $data = []);
 
     /**
      * Write output to response object
@@ -74,6 +74,6 @@ interface View {
      *
      * @return []
      */
-    public function data();
+    public function data(): array;
 
 }

@@ -27,7 +27,7 @@ class Router implements Route {
     private $_controllerNs = '';
     private $_rewriteRules;
 
-    public function __construct($controllerNs, $rewriteRules = []) {
+    public function __construct(\string $controllerNs, array $rewriteRules = []) {
         $this->_controllerNs = rtrim($controllerNs, '\\');
         $this->_rewriteRules = $rewriteRules;
     }
@@ -40,7 +40,8 @@ class Router implements Route {
      *
      * @return bool
      */
-    public function isMatched( $pathinfo, $index) {
+    public function isMatched(\string $pathinfo, \int $index): \bool
+    {
         $pathinfo = $this->_urlRewrite($pathinfo);
 
         if (!empty($pathinfo)) {
@@ -76,7 +77,8 @@ class Router implements Route {
         return false;
     }
 
-    private function _urlRewrite($pathinfo) {
+    private function _urlRewrite(\string $pathinfo): \string
+    {
         foreach ($this->_rewriteRules as $pattern => $dest) {
             if (preg_match($pattern, $pathinfo)) {
                 $pathinfo = preg_replace($pattern, $dest, $pathinfo);
@@ -187,7 +189,8 @@ class Router implements Route {
      *
      * @return bool
      */
-    public function isContinue() {
+    public function isContinue(): \bool
+    {
         return false;
     }
 }

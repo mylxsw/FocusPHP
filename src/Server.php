@@ -4,7 +4,8 @@
  *
  * @link      http://aicode.cc/
  * @copyright 管宜尧 <mylxsw@aicode.cc>
- * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the
+ *            LICENSE file)
  */
 
 namespace Focus;
@@ -16,6 +17,7 @@ use Focus\Request\Request;
 use Focus\Response\HttpResponse;
 use Focus\Response\Response;
 use Focus\Router\NotFoundRouter;
+use Focus\Router\Route;
 use Focus\Uri\DefaultUri;
 use Focus\Uri\Uri;
 use Interop\Container\ContainerInterface;
@@ -23,7 +25,8 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 
-class Server {
+class Server
+{
 
     private static $_instance = null;
     const VERSION = '0.1.0';
@@ -43,12 +46,13 @@ class Server {
      */
     private $_container;
 
-    private function __construct(ContainerInterface $container) {
+    private function __construct(ContainerInterface $container)
+    {
         if (is_null($container)) {
             $container = Container::instance();
         }
         $this->_container = $container;
-        $this->_router = $container->get(Router::class);
+        $this->_router    = $container->get(Router::class);
     }
 
     /**
@@ -59,7 +63,8 @@ class Server {
      * @return Server
      * @throws \ErrorException
      */
-    public static function init(Container $container = null) {
+    public static function init(Container $container = null): Server
+    {
         if (empty(self::$_instance)) {
 
             // 环境检测
@@ -76,7 +81,8 @@ class Server {
         return self::$_instance;
     }
 
-    public function run() {
+    public function run()
+    {
         $matched = $this->_router->parse();
         try {
             if (empty($matched)) {
@@ -103,11 +109,13 @@ class Server {
      * @param $router
      * @param $params
      */
-    public function registerRouter($router, ...$params) {
+    public function registerRouter($router, ...$params)
+    {
         $this->_router->add($router, ...$params);
-        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG) {
             $this->getLogger()->debug('add new router: '
-                                  . (is_string($router) ? $router : get_class($router)));
+                . (is_string($router) ? $router : get_class($router)));
+        }
     }
 
     /**
@@ -115,22 +123,28 @@ class Server {
      *
      * @param callable $handler
      */
-    public function registerExceptionHandler($handler) {
+    public function registerExceptionHandler(callable $handler)
+    {
         set_exception_handler($handler);
-        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG) {
             $this->getLogger()->debug('register exception handler ok');
+        }
     }
 
     /**
      * register error handler
      *
-     * @param callable $params       callable
-     * @param int      $error_types （E_ALL|E_STRICT）
+     * @param callable $error_handler
+     * @param int      $error_types
      */
-    public function registerErrorHandler(...$params) {
-        set_error_handler(...$params);
-        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
+    public function registerErrorHandler(
+        callable $error_handler,
+        \int $error_types = E_ALL | E_STRICT
+    ) {
+        set_error_handler($error_handler, $error_types);
+        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG) {
             $this->getLogger()->debug('register error handler ok');
+        }
     }
 
     /**
@@ -139,8 +153,10 @@ class Server {
      * @param string $baseDir Root directory of the project
      * @param string $baseNs  Basic namespace
      */
-    public function registerAutoloader($baseDir, $baseNs) {
-        $baseNs = $baseNs[strlen($baseNs) - 1] == '\\' ? $baseNs : "{$baseNs}\\";
+    public function registerAutoloader(\string $baseDir, \string $baseNs)
+    {
+        $baseNs =
+            $baseNs[strlen($baseNs) - 1] == '\\' ? $baseNs : "{$baseNs}\\";
         $baseDir = rtrim($baseDir, '/');
 
         spl_autoload_register(
@@ -149,16 +165,21 @@ class Server {
                     $filename = str_replace(
                         '\\',
                         '/',
-                        $baseDir . '/' . substr($class, strlen($baseNs)) . '.php'
+                        $baseDir . '/' . substr($class, strlen($baseNs))
+                        . '.php'
                     );
                     if (file_exists($filename)) {
-                        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
-                            $this->getLogger()->debug('automatic load file ' . $filename);
+                        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG) {
+                            $this->getLogger()->debug('automatic load file '
+                                . $filename);
+                        }
 
                         include $filename;
 
-                        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG)
-                            $this->getLogger()->debug("file {$filename} loaded");
+                        if (defined('FOCUS_DEBUG') && FOCUS_DEBUG) {
+                            $this->getLogger()
+                                ->debug("file {$filename} loaded");
+                        }
                     }
                 }
             },
@@ -170,45 +191,52 @@ class Server {
     /**
      * @return Request
      */
-    public function getRequest() {
+    public function getRequest(): Request
+    {
         return $this->_container->get(Request::class);
     }
 
     /**
      * @return Response
      */
-    public function getResponse() {
+    public function getResponse(): Response
+    {
         return $this->_container->get(Response::class);
     }
 
     /**
      * @return Uri
      */
-    public function getUri() {
+    public function getUri(): Uri
+    {
         return $this->_container->get(Uri::class);
     }
 
     /**
-     * @return Router\Route
+     * @return Route
      */
-    public function getNotFoundRouter() {
+    public function getNotFoundRouter(): Route
+    {
         if (empty($this->_notFoundRouter)) {
             $this->_notFoundRouter = new NotFoundRouter();
         }
+
         return $this->_notFoundRouter;
     }
 
     /**
      * @param NotFoundRouter $notFoundRouter
      */
-    public function setNotFoundRouter(NotFoundRouter $notFoundRouter ) {
+    public function setNotFoundRouter(NotFoundRouter $notFoundRouter)
+    {
         $this->_notFoundRouter = $notFoundRouter;
     }
 
     /**
      * @return LoggerInterface
      */
-    public function getLogger() {
+    public function getLogger(): LoggerInterface
+    {
         return $this->_container->get(LoggerInterface::class);
     }
 }

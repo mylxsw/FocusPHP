@@ -13,6 +13,7 @@ namespace Focus\Request;
 
 use Focus\Uri\Uri;
 use Focus\Config\Config;
+use Interop\Container\ContainerInterface;
 
 interface Request {
 
@@ -20,29 +21,53 @@ interface Request {
     /**
      * @return Uri
      */
-    public function uri();
+    public function uri(): Uri;
 
     /**
      * @return Config
      */
-    public function config();
+    public function config(): Config;
 
-    public function get($key, $default = null);
+    /**
+     * @param string $key
+     * @param null   $default
+     *
+     * @return mixed
+     */
+    public function get(\string $key, $default = null);
 
-    public function post($key, $default = null);
+    /**
+     * @param string $key
+     * @param null   $default
+     *
+     * @return mixed
+     */
+    public function post(\string $key, $default = null);
 
-    public function request($key, $default = null);
+    /**
+     * @param string $key
+     * @param null   $default
+     *
+     * @return mixed
+     */
+    public function request(\string $key, $default = null);
 
-    public function cookie($key, $default = null);
+    /**
+     * @param string $key
+     * @param null   $default
+     *
+     * @return mixed
+     */
+    public function cookie(\string $key, $default = null);
 
     /**
      * @return \Interop\Container\ContainerInterface
      */
-    public function container();
+    public function container(): ContainerInterface;
 
     /**
      * @return Session
      */
-    public function session();
+    public function session(): Session;
 
 } 

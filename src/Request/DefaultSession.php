@@ -18,19 +18,19 @@ class DefaultSession implements Session{
         session_start();
     }
 
-    public function get( $key, $default = null ) {
+    public function get(\string $key, $default = null ) {
         return empty($_SESSION[$key]) ? $default : $_SESSION[$key];
     }
 
-    public function set( $key, $value ) {
+    public function set(\string $key, $value ) {
         $_SESSION[$key] = $value;
     }
 
-    public function getId() {
+    public function getId(): \string {
         return session_id();
     }
 
-    public function setId( $id ) {
+    public function setId(\string $id ) {
         session_id($id);
     }
 

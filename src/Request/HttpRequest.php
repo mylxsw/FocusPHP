@@ -34,7 +34,7 @@ class HttpRequest implements Request
     /**
      * @return Uri
      */
-    public function uri()
+    public function uri(): Uri
     {
         return $this->_container->get(Uri::class);
     }
@@ -42,28 +42,28 @@ class HttpRequest implements Request
     /**
      * @return Config
      */
-    public function config()
+    public function config(): Config
     {
         return $this->_container->get(Config::class);
     }
 
-    public function get($key, $default = null)
+    public function get(\string $key, $default = null)
     {
         return empty($_GET[$key]) ? $default : $this->_escape($_GET[$key]);
     }
 
-    public function post($key, $default = null)
+    public function post(\string $key, $default = null)
     {
         return empty($_POST[$key]) ? $default : $this->_escape($_POST[$key]);
     }
 
-    public function request($key, $default = null)
+    public function request(\string $key, $default = null)
     {
         return empty($_REQUEST[$key]) ? $default
             : $this->_escape($_REQUEST[$key]);
     }
 
-    public function cookie($key, $default = null)
+    public function cookie(\string $key, $default = null)
     {
         return empty($_COOKIE[$key]) ? $default
             : $this->_escape($_COOKIE[$key]);
@@ -93,7 +93,7 @@ class HttpRequest implements Request
     /**
      * @return Session
      */
-    public function session()
+    public function session(): Session
     {
         return $this->_container->get(Session::class);
     }
@@ -101,7 +101,7 @@ class HttpRequest implements Request
     /**
      * @return \Interop\Container\ContainerInterface
      */
-    public function container()
+    public function container(): ContainerInterface
     {
         return $this->_container;
     }
@@ -111,7 +111,7 @@ class HttpRequest implements Request
      *
      * @return bool
      */
-    public function isXMLHttpRequest()
+    public function isXMLHttpRequest(): \bool
     {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
         && strtoupper($_SERVER['HTTP_X_REQUESTED_WITH']) == 'XMLHTTPREQUEST';
@@ -125,7 +125,7 @@ class HttpRequest implements Request
      *
      * @return string
      */
-    public function redirect($url, $temporary = true)
+    public function redirect($url, $temporary = true): \string
     {
         header("Location: {$url}", true, $temporary ? 302 : 301);
         return '';

@@ -17,7 +17,8 @@ trait ResponseAwareTrait {
     /**
      * @return Response
      */
-    public function getResponse() {
+    public function getResponse(): Response
+    {
         return Container::instance()->get(Response::class);
     }
 } 
