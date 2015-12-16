@@ -21,9 +21,9 @@ class Environ
      *
      * @return bool|string
      */
-    public static function ini($key, $default = false)
+    public static function cfg($key, $default = false)
     {
-        $option = ini_get($key);
+        $option = get_cfg_var($key);
 
         return $option === false ? $default : $option;
     }
