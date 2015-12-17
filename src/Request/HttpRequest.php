@@ -49,23 +49,23 @@ class HttpRequest implements Request
 
     public function get($key, $default = null)
     {
-        return empty($_GET[$key]) ? $default : $this->_escape($_GET[$key]);
+        return is_null($_GET[$key]) ? $default : $this->_escape($_GET[$key]);
     }
 
     public function post($key, $default = null)
     {
-        return empty($_POST[$key]) ? $default : $this->_escape($_POST[$key]);
+        return is_null($_POST[$key]) ? $default : $this->_escape($_POST[$key]);
     }
 
     public function request($key, $default = null)
     {
-        return empty($_REQUEST[$key]) ? $default
+        return is_null($_REQUEST[$key]) ? $default
             : $this->_escape($_REQUEST[$key]);
     }
 
     public function cookie($key, $default = null)
     {
-        return empty($_COOKIE[$key]) ? $default
+        return is_null($_COOKIE[$key]) ? $default
             : $this->_escape($_COOKIE[$key]);
     }
 
