@@ -18,6 +18,12 @@ use Interop\Container\ContainerInterface;
 
 class HttpRequest implements Request
 {
+    const HTTP_GET = 'GET';
+    const HTTP_POST = 'POST';
+    const HTTP_HEAD = 'HEAD';
+    const HTTP_PUT = 'PUT';
+    const HTTP_DELETE = 'DELETE';
+    const HTTP_OPTIONS = 'OPTIONS';
 
     /**
      * @var ContainerInterface
@@ -27,7 +33,7 @@ class HttpRequest implements Request
 
     public function __construct(ContainerInterface $container)
     {
-        $this->_container  = $container;
+        $this->_container = $container;
         $this->_needEscape = !get_magic_quotes_gpc();
     }
 
@@ -99,7 +105,7 @@ class HttpRequest implements Request
         }
 
         if (is_array($value)) {
-            return array_map(function($n) {
+            return array_map(function ($n) {
                 return addslashes($n);
             }, $value);
         }
@@ -134,9 +140,19 @@ class HttpRequest implements Request
     }
 
     /**
+     * Get request method
+     *
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $_SERVER['REQUEST_METHOD'];
+    }
+
+    /**
      * 页面跳转
      *
-     * @param string    $url
+     * @param string $url
      * @param bool|true $temporary 暂时or永久
      *
      * @return string
