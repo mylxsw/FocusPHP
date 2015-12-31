@@ -25,7 +25,7 @@ class DefaultRouter implements Route {
     private $_params;
 
     public function __construct($key, ...$params) {
-        $this->_key = $key;
+        $this->_key = trim($key, '/');
         if (empty($params[0])) {
             throw new \InvalidArgumentException("INVALID_ROUTER_ARGS");
         }
@@ -42,7 +42,7 @@ class DefaultRouter implements Route {
      * @return bool
      */
     public function isMatched( $pathinfo, $index ) {
-        return $this->_key == $pathinfo;
+        return $this->_key == trim($pathinfo, '/');
     }
 
     /**
