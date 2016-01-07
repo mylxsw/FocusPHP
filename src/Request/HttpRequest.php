@@ -162,4 +162,14 @@ class HttpRequest implements Request
         header("Location: {$url}", true, $temporary ? 302 : 301);
         return '';
     }
+
+    /**
+     * Get Http input stream
+     *
+     * @return string
+     */
+    public function getInputStream()
+    {
+        return file_get_contents('php://input');
+    }
 }
