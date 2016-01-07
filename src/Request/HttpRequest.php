@@ -18,23 +18,21 @@ use Interop\Container\ContainerInterface;
 
 class HttpRequest implements Request
 {
-    const HTTP_GET = 'GET';
-    const HTTP_POST = 'POST';
-    const HTTP_HEAD = 'HEAD';
-    const HTTP_PUT = 'PUT';
-    const HTTP_DELETE = 'DELETE';
+    const HTTP_GET     = 'GET';
+    const HTTP_POST    = 'POST';
+    const HTTP_HEAD    = 'HEAD';
+    const HTTP_PUT     = 'PUT';
+    const HTTP_DELETE  = 'DELETE';
     const HTTP_OPTIONS = 'OPTIONS';
 
     /**
      * @var ContainerInterface
      */
     private $_container;
-    private $_needEscape = false;
 
     public function __construct(ContainerInterface $container)
     {
         $this->_container = $container;
-        $this->_needEscape = !get_magic_quotes_gpc();
     }
 
     /**
@@ -53,63 +51,110 @@ class HttpRequest implements Request
         return $this->_container->get(Config::class);
     }
 
-    public function get($key, $default = null)
+    /**
+     * @param      $key
+     * @param null $default
+     * @param bool $htmlEntities 是否使用htmlspecialchars处理
+     *
+     * @return null|string
+     */
+    public function get($key, $default = null, $htmlEntities = false)
     {
         if (!isset($_GET[$key])) {
             return $default;
         }
 
-        return is_null($_GET[$key]) ? $default : $this->_escape($_GET[$key]);
+        return is_null($_GET[$key]) ? $default
+            : $this->_escape($_GET[$key], $htmlEntities);
     }
 
-    public function post($key, $default = null)
+    /**
+     * @param      $key
+     * @param null $default
+     * @param bool $htmlEntities 是否使用htmlspecialchars处理
+     *
+     * @return null|string
+     */
+    public function post($key, $default = null, $htmlEntities = false)
     {
         if (!isset($_POST[$key])) {
             return $default;
         }
 
-        return is_null($_POST[$key]) ? $default : $this->_escape($_POST[$key]);
+        return is_null($_POST[$key]) ? $default
+            : $this->_escape($_POST[$key], $htmlEntities);
     }
 
-    public function request($key, $default = null)
+    /**
+     * @param      $key
+     * @param null $default
+     * @param bool $htmlEntities 是否使用htmlspecialchars处理
+     *
+     * @return null|string
+     */
+    public function request($key, $default = null, $htmlEntities = false)
     {
         if (!isset($_REQUEST[$key])) {
             return $default;
         }
 
         return is_null($_REQUEST[$key]) ? $default
-            : $this->_escape($_REQUEST[$key]);
+            : $this->_escape($_REQUEST[$key], $htmlEntities);
     }
 
-    public function cookie($key, $default = null)
+    /**
+     * @param      $key
+     * @param null $default
+     * @param bool $htmlEntities 是否使用htmlspecialchars处理
+     *
+     * @return null|string
+     */
+    public function cookie($key, $default = null, $htmlEntities = false)
     {
         if (!isset($_COOKIE[$key])) {
             return $default;
         }
 
         return is_null($_COOKIE[$key]) ? $default
-            : $this->_escape($_COOKIE[$key]);
+            : $this->_escape($_COOKIE[$key], $htmlEntities);
     }
 
     /**
      * escape string value
      *
      * @param $value
+     * @param $htmlEntities
      *
      * @return string
      */
-    private function _escape($value)
+    private function _escape($value, $htmlEntities = false)
     {
-        if (!$this->_needEscape) {
+        if (get_magic_quotes_gpc()) {
+            if ($htmlEntities) {
+                return htmlspecialchars($value);
+            }
+
             return $value;
         }
 
         if (is_array($value)) {
-            return array_map(function ($n) {
-                return addslashes($n);
+            return array_map(function ($n) use ($htmlEntities) {
+                $val = stripslashes($n);
+
+                if ($htmlEntities) {
+                    return htmlspecialchars($val);
+                }
+
+                return $val;
             }, $value);
         }
-        return addslashes($value);
+        $val = stripslashes($value);
+
+        if ($htmlEntities) {
+            return htmlspecialchars($val);
+        }
+
+        return $val;
     }
 
     /**
@@ -136,7 +181,8 @@ class HttpRequest implements Request
     public function isXMLHttpRequest()
     {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-        && strtoupper($_SERVER['HTTP_X_REQUESTED_WITH']) == 'XMLHTTPREQUEST';
+               && strtoupper($_SERVER['HTTP_X_REQUESTED_WITH'])
+                  == 'XMLHTTPREQUEST';
     }
 
     /**
@@ -152,7 +198,7 @@ class HttpRequest implements Request
     /**
      * 页面跳转
      *
-     * @param string $url
+     * @param string    $url
      * @param bool|true $temporary 暂时or永久
      *
      * @return string
@@ -160,6 +206,7 @@ class HttpRequest implements Request
     public function redirect($url, $temporary = true)
     {
         header("Location: {$url}", true, $temporary ? 302 : 301);
+
         return '';
     }
 
