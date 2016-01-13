@@ -24,4 +24,6 @@ interface Session {
 
     public function destroy();
 
+    public function remove(...$keys);
+
 } 

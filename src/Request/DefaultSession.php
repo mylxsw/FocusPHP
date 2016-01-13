@@ -41,4 +41,13 @@ class DefaultSession implements Session{
     public function destroy() {
         session_destroy();
     }
+
+    public function remove(...$keys)
+    {
+        foreach ($keys as $key) {
+            if (isset($_SESSION[$key])) {
+                unset($_SESSION[$key]);
+            }
+        }
+    }
 }
