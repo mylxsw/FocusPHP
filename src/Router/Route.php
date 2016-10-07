@@ -1,21 +1,21 @@
 <?php
 /**
- * FocusPHP
+ * FocusPHP.
  *
  * @link      http://aicode.cc/
+ *
  * @copyright 管宜尧 <mylxsw@aicode.cc>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
 namespace Focus\Router;
 
-
 use Focus\Request\Request;
 use Focus\Response\Response;
 
-interface Route {
-
+interface Route
+{
     /**
-     * 判断路由规则是否匹配
+     * 判断路由规则是否匹配.
      *
      * @param string $pathinfo pathinfo
      * @param int    $index    路由规则索引
@@ -36,9 +36,9 @@ interface Route {
     public function execute(Request $request, Response $response, ...$params);
 
     /**
-     * 是否继续查找路由
+     * 是否继续查找路由.
      *
      * @return bool
      */
     public function isContinue();
-} 
+}

@@ -1,36 +1,33 @@
 <?php
 /**
- * FocusPHP
+ * FocusPHP.
  *
  * @link      http://aicode.cc/
+ *
  * @copyright 管宜尧 <mylxsw@aicode.cc>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
-
 namespace Focus;
 
+use Focus\Config\ArrayConfig;
+use Focus\Config\Config;
+use Focus\Exception\ObjectNotFoundException;
+use Focus\Log\Logger;
+use Focus\Request\DefaultSession;
+use Focus\Request\HttpRequest;
+use Focus\Request\Request;
+use Focus\Request\Session;
+use Focus\Response\HttpResponse;
+use Focus\Response\Response;
+use Focus\Uri\DefaultUri;
+use Focus\Uri\Uri;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Interop\Container\Exception\NotFoundException;
-
 use Psr\Log\LoggerInterface;
 
-use Focus\Exception\ObjectNotFoundException;
-use Focus\Request\Request;
-use Focus\Request\HttpRequest;
-use Focus\Response\Response;
-use Focus\Response\HttpResponse;
-use Focus\Request\Session;
-use Focus\Request\DefaultSession;
-use Focus\Uri\Uri;
-use Focus\Uri\DefaultUri;
-use Focus\Router;
-use Focus\Config\Config;
-use Focus\Config\ArrayConfig;
-use Focus\Log\Logger;
-
-class BasicContainer implements ContainerInterface {
-
+class BasicContainer implements ContainerInterface
+{
     private $_classes = [];
     private $_lazy_classes = [];
     private static $_systemClasses = [
@@ -40,10 +37,11 @@ class BasicContainer implements ContainerInterface {
         Uri::class                  => DefaultUri::class,
         Router::class               => Router::class,
         Config::class               => [ArrayConfig::class, false],
-        LoggerInterface::class      => Logger::class
+        LoggerInterface::class      => Logger::class,
     ];
 
-    public function __construct(...$config_files) {
+    public function __construct(...$config_files)
+    {
         foreach ($config_files as $file) {
             if (file_exists($file)) {
                 $config = include $file;
@@ -66,7 +64,8 @@ class BasicContainer implements ContainerInterface {
      *
      * @return mixed Entry.
      */
-    public function get( $id ) {
+    public function get($id)
+    {
         if ($this->has($id)) {
             return $this->_classes[$id];
         }
@@ -80,9 +79,10 @@ class BasicContainer implements ContainerInterface {
      *
      * @param string $id Identifier of the entry to look for.
      *
-     * @return boolean
+     * @return bool
      */
-    public function has( $id ) {
+    public function has($id)
+    {
         $res = isset($this->_classes[$id]);
 
         if ($res == false && isset($this->_lazy_classes[$id])) {
@@ -98,24 +98,26 @@ class BasicContainer implements ContainerInterface {
         if ($res == false && $this->isSystemClass($id)) {
             $res = $this->_loadSystemClass($id);
         }
+
         return $res;
     }
 
     /**
-     * check whether the class name is system class
+     * check whether the class name is system class.
      *
      * @param string $id class name
      *
      * @return bool
      */
-    public function isSystemClass($id) {
+    public function isSystemClass($id)
+    {
         return isset(self::$_systemClasses[$id]);
     }
 
-
-    private function _loadSystemClass($id) {
+    private function _loadSystemClass($id)
+    {
         if (is_array(self::$_systemClasses[$id]) && self::$_systemClasses[$id][1] === false) {
-            $object = new self::$_systemClasses[$id];
+            $object = new self::$_systemClasses[$id]();
         } else {
             $object = new self::$_systemClasses[$id]($this);
         }
@@ -126,15 +128,17 @@ class BasicContainer implements ContainerInterface {
     }
 
     /**
-     * set an object
+     * set an object.
      *
      * @param $id
      * @param $object
      *
      * @return BasicContainer
      */
-    public function set($id, $object) {
+    public function set($id, $object)
+    {
         $this->_classes[$id] = $object;
+
         return $this;
     }
 }

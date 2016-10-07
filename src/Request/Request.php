@@ -1,22 +1,19 @@
 <?php
 /**
- * FocusPHP
+ * FocusPHP.
  *
  * @link      http://aicode.cc/
+ *
  * @copyright 管宜尧 <mylxsw@aicode.cc>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
-
 namespace Focus\Request;
 
-
-
-use Focus\Uri\Uri;
 use Focus\Config\Config;
+use Focus\Uri\Uri;
 
-interface Request {
-
-
+interface Request
+{
     /**
      * @return Uri
      */
@@ -44,5 +41,4 @@ interface Request {
      * @return Session
      */
     public function session();
-
-} 
+}

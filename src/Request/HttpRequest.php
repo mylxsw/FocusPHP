@@ -1,28 +1,26 @@
 <?php
 /**
- * FocusPHP
+ * FocusPHP.
  *
  * @link      http://aicode.cc/
+ *
  * @copyright 管宜尧 <mylxsw@aicode.cc>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the
  *            LICENSE file)
  */
-
 namespace Focus\Request;
 
-
-use Focus\Uri\Uri;
 use Focus\Config\Config;
-use Focus\Request\Session;
+use Focus\Uri\Uri;
 use Interop\Container\ContainerInterface;
 
 class HttpRequest implements Request
 {
-    const HTTP_GET     = 'GET';
-    const HTTP_POST    = 'POST';
-    const HTTP_HEAD    = 'HEAD';
-    const HTTP_PUT     = 'PUT';
-    const HTTP_DELETE  = 'DELETE';
+    const HTTP_GET = 'GET';
+    const HTTP_POST = 'POST';
+    const HTTP_HEAD = 'HEAD';
+    const HTTP_PUT = 'PUT';
+    const HTTP_DELETE = 'DELETE';
     const HTTP_OPTIONS = 'OPTIONS';
 
     /**
@@ -120,7 +118,7 @@ class HttpRequest implements Request
     }
 
     /**
-     * escape string value
+     * escape string value.
      *
      * @param $value
      * @param $htmlEntities
@@ -174,7 +172,7 @@ class HttpRequest implements Request
     }
 
     /**
-     * 判断是否是XMLHttpRequest
+     * 判断是否是XMLHttpRequest.
      *
      * @return bool
      */
@@ -186,7 +184,7 @@ class HttpRequest implements Request
     }
 
     /**
-     * Get request method
+     * Get request method.
      *
      * @return string
      */
@@ -196,7 +194,7 @@ class HttpRequest implements Request
     }
 
     /**
-     * 页面跳转
+     * 页面跳转.
      *
      * @param string    $url
      * @param bool|true $temporary 暂时or永久
@@ -211,7 +209,7 @@ class HttpRequest implements Request
     }
 
     /**
-     * Get Http input stream
+     * Get Http input stream.
      *
      * @return string
      */

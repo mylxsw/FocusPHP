@@ -1,20 +1,19 @@
 <?php
 /**
- * FocusPHP
+ * FocusPHP.
  *
  * @link      http://aicode.cc/
+ *
  * @copyright 管宜尧 <mylxsw@aicode.cc>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the
  *            LICENSE file)
  */
-
 namespace Focus;
-
 
 class Environ
 {
     /**
-     * Get php.ini configuration
+     * Get php.ini configuration.
      *
      * @param string     $key
      * @param bool|false $default
@@ -27,5 +26,4 @@ class Environ
 
         return $option === false ? $default : $option;
     }
-
 }
