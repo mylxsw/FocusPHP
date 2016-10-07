@@ -1,32 +1,34 @@
 <?php
 /**
- * FocusPHP
+ * FocusPHP.
  *
  * @link      http://aicode.cc/
+ *
  * @copyright 管宜尧 <mylxsw@aicode.cc>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT (see the LICENSE file)
  */
-
 namespace Focus;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Interop\Container\Exception\NotFoundException;
 
-
-class Container implements ContainerInterface {
-
+class Container implements ContainerInterface
+{
     protected static $instance;
     private $_container;
 
-    private function __construct(){}
+    private function __construct()
+    {
+    }
 
     /**
-     * Get the container instance singleton
+     * Get the container instance singleton.
      *
      * @return Container
      */
-    public static function instance() {
+    public static function instance()
+    {
         if (empty(static::$instance)) {
             static::$instance = new static();
         }
@@ -35,23 +37,26 @@ class Container implements ContainerInterface {
     }
 
     /**
-     * Set container instance
+     * Set container instance.
      *
      * @param ContainerInterface $container
      *
      * @return Container
      */
-    public function setContainer(ContainerInterface $container) {
+    public function setContainer(ContainerInterface $container)
+    {
         $this->_container = $container;
+
         return $this;
     }
 
     /**
-     * Get container instance
+     * Get container instance.
      *
      * @return ContainerInterface
      */
-    public function getContainer() {
+    public function getContainer()
+    {
         if (empty($this->_container)) {
             $this->_container = new BasicContainer();
         }
@@ -69,7 +74,8 @@ class Container implements ContainerInterface {
      *
      * @return mixed Entry.
      */
-    public function get( $id ) {
+    public function get($id)
+    {
         return $this->getContainer()->get($id);
     }
 
@@ -79,9 +85,10 @@ class Container implements ContainerInterface {
      *
      * @param string $id Identifier of the entry to look for.
      *
-     * @return boolean
+     * @return bool
      */
-    public function has( $id ) {
+    public function has($id)
+    {
         return $this->getContainer()->has($id);
     }
 }
